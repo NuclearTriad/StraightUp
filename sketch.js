@@ -754,12 +754,12 @@ function drawIconOnRadar() {
         } //Se l'icona è stat visitata
     }
     push();
-    // noFill();
-    // stroke(45,45,45);
-    // strokeWeight(2);
-    // rectMode(CENTER);
-    // rect( (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80 );
-    hit_struct=collidePointRect(mouseX-width/2,mouseY-height/2,(posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80)
+    //noFill();
+    //stroke(45,45,45);
+    //strokeWeight(2);
+    //rectMode(CENTER);
+    //rect( (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80 );
+    hit_struct=collidePointRect(mouseX-width/2,mouseY-height/2,(posRelMe[i].Lon)*zoom-20,(posRelMe[i].Lat)*zoom*(-1)-17,40,80)
     if(hit_struct==true && mouseIsPressed){
       console.log('OK');
     }
