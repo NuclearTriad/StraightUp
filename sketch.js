@@ -15,7 +15,6 @@ var c=-150;
 var sequoiaDemoOn=false;
 var burjDemoOn=false;
 var demoTitlesOn=false;
-var structTitle;
 
 var myData, //segnaposto JSON
 
@@ -277,8 +276,6 @@ function climbMode(struct_bg,struct_img,struct_height,cloudBool,cloudHeight) { /
   demoTitlesOn=false;
   radarOn=false;
   climbOn=true;
-
-  structTitle=struct_img;
 
   if(f>1800){f=1800} else{f+=50;}
   if(f>1000){
