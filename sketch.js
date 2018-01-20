@@ -274,7 +274,7 @@ function demoTitles(){
 var f=300;
 function climbMode(struct_bg,struct_img,struct_height,cloudBool,cloudHeight) { //attualmente composta da un'interfaccia e una struttura
   demoTitlesOn=false;
-  radarOn=false;
+  radarOn=true;
   climbOn=true;
 
   if(f>1800){f=1800} else{f+=50;}
@@ -759,41 +759,42 @@ function drawIconOnRadar() {
         if (myData.landmarks_en[i].visit==false) {
           fill(45,45,95,70);
           ellipse((circle/2)*cos(posRelMe[i].Ang-90),(circle/2)*sin(posRelMe[i].Ang-90),65,15);
-          image(imgLinkGray[i], (circle/2)*cos(posRelMe[i].Ang-90), (circle/2)*sin(posRelMe[i].Ang-90)-57,60,114);
+          image(imgLinkGray[i], (circle/2)*cos(posRelMe[i].Ang-90), (circle/2)*sin(posRelMe[i].Ang-90)-40,40,80);
         } //Se l'icona non è stat visitata
         else {
           fill(45,45,95,70);
           ellipse((circle/2)*cos(posRelMe[i].Ang-90),(circle/2)*sin(posRelMe[i].Ang-90),65,15);
-          image(imgLinkColore[i], (circle/2)*cos(posRelMe[i].Ang-90), (circle/2)*sin(posRelMe[i].Ang-90)-57,60,114);
+          image(imgLinkColore[i], (circle/2)*cos(posRelMe[i].Ang-90), (circle/2)*sin(posRelMe[i].Ang-90)-40,40,80);
         } //Se l'icona è stat visitata
       }
 
       else if (posRelMe[i].dist<distCliccable) {
-        fill(45,45,95,70);
+        fill(244,128,33,210);
         ellipse((posRelMe[i].Lon)*zoom,((posRelMe[i].Lat)*zoom*(-1)),65,15);
-        image(imgLinkColore[i], (posRelMe[i].Lon)*zoom,((posRelMe[i].Lat)*zoom*(-1))-57,60,114);
+        image(imgLinkColore[i], (posRelMe[i].Lon)*zoom,((posRelMe[i].Lat)*zoom*(-1))-40,40,80);
       } //Se l'icona si trova nelle vicinanze
 
       else {  //Se l'icona è dentro il radar
         if (myData.landmarks_en[i].visit==false) {
           fill(45,45,95,70);
           ellipse((posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1),65,15);
-          image(imgLinkGray[i], (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-57,60,114);
+          image(imgLinkGray[i], (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-40,40,80);
         } //Se l'icona non è stat visitata
         else {
           fill(45,45,95,70);
           ellipse((posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1),65,15);
-          image(imgLinkColore[i], (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-57,60,114);
+          image(imgLinkColore[i], (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-40,40,80);
         } //Se l'icona è stat visitata
     }
     push();
-    noFill();
-    stroke(45,45,45);
-    strokeWeight(2);
-    rectMode(CENTER);
-    rect( (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80 );
+    // noFill();
+    // // stroke(45,45,45);
+    // // strokeWeight(2);
+    // // rectMode(CENTER);
+    // rect( (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80 );
     hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-height/2,(posRelMe[i].Lon)*zoom-20,(posRelMe[i].Lat)*zoom*(-1)-17,40,80)
     if(hit_struct[i]==true){
+
       push();
       translate(0,-posYPointer) //counter posYPointer
       climbMode(imgLinkBack[i],imgLink[i],50,true,1.25);
