@@ -1,13 +1,9 @@
 var faded_en = 0;
 var faded_it = 145;
-var startFader=false;
-var demoFader=false;
-var opb=0;
 var radarOn=false;
-var demoOn=false;
 var eng=true;
 var ita=false;
-var transTime=250;
+var transTime=150;
 var rot=0;
 var climbOn=false;
 var backMenu=false;
@@ -16,6 +12,10 @@ var titleScreenOn = true;
 var infoOn=false;
 var infoButtonShow=false;
 var c=-150;
+var sequoiaDemoOn=false;
+var burjDemoOn=false;
+var demoTitlesOn=false;
+var structTitle;
 
 var myData, //segnaposto JSON
 
@@ -37,6 +37,10 @@ var myData, //segnaposto JSON
 
     imgLinkGray = [];
     imgLinkColore = [];
+    imgLinkBack = [];
+    imgLink = [];
+
+    hit_struct = [];
 
 
 function preload() { //tutti i preload delle immagini e i font
@@ -50,11 +54,13 @@ function preload() { //tutti i preload delle immagini e i font
   flag_en = loadImage('./assets/lang_en.png');
   flag_it = loadImage('./assets/lang_it.png');
   pointer = loadImage('./assets/pointer.png');
-  hyperion_col = loadImage('./assets/hyperion_col.png');
-  burj_col = loadImage('./assets/burj_col.png');
+  sequoia_colore = loadImage('./assets/sequoia_colore.png');
+  sequoia_button = loadImage('./assets/sequoia_button.png');
+  burijKalifa_colore = loadImage('./assets/burijKalifa_colore.png');
+  burijKalifa_button = loadImage('./assets/burijKalifa_button.png');
   cloud = loadImage('./assets/cloud.png');
   sequoia_bg = loadImage('./assets/sequoia_bg.png');
-  sequoia_climb = loadImage('./assets/sequoia_climb.png');
+  sequoia = loadImage('./assets/sequoia.png');
   infoButtonIco = loadImage('./assets/infoButtonIco.png');
   SU_logo = loadImage('./assets/SU_logo.png');
 
@@ -76,60 +82,51 @@ function setup() { //tutti i default dell'interfaccia
   for (var i=0; i < myData.landmarks_en.length; i++) {
     imgLinkGray.push("assets/"+myData.landmarks_en[i].img_gray);
     imgLinkColore.push("assets/"+myData.landmarks_en[i].img_color);
+    imgLinkBack.push("assets/"+myData.landmarks_en[i].img_back);
+    imgLink.push("assets/"+myData.landmarks_en[i].img);
     imgLinkGray[i] = loadImage(imgLinkGray[i]);
     imgLinkColore[i] = loadImage(imgLinkColore[i]);
+    imgLinkBack[i] = loadImage(imgLinkBack[i]);
+    imgLink[i] = loadImage(imgLink[i]);
     }
   }
 
 function draw() {
-  translate(width/2,height/2); //un classico
+  translate(width/2,height/2);
   background(colorList[0]);
   // infoOn=true;
-  // climbMode();
+  // climbMode(sequoia_bg,sequoia,50,true,1.25);
   // demoTitles();
   // radar();
-  if(titleScreenOn==true) { //tutte le variabili booleane che finiscono con "on" servono per attivare le schermate
-  titleScreen();
-}
+  if(titleScreenOn==true) {
+    titleScreen();
+  };
 
-  //Attiva la modalità radar con il fade (opb gestisce l'opacità)
-  if(startFader==true || demoFader==true) {
-    if(opb<=255){opb+=30}
-    background(159,211,214,opb);
-    if(opb>255 && startFader==true){ //finito di opacizzarsi avvia il radar
+  if(radarOn==true){
+    radar();
+  };
 
-      radar();
+  if(demoTitlesOn==true){
+    demoTitles();
+  };
 
-    }
+  if(sequoiaDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
+    climbMode(imgLinkBack[7],imgLink[7],50,true,1.25); //struct_bg,struct_img,struct_height,cloudBool,cloudHeight
+  };
 
-    if(opb>255 && demoFader==true){ //finito di opacizzarsi avvia il menu demo
-
-      demoTitles();
-    }
-  }
-
-if(climbOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
-  demoOn=false;
-  climbMode();
-};
+  if(burjDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
+    climbMode(imgLinkBack[8],imgLink[8],150,true,2); //struct_bg,struct_img,struct_height,cloudBool,cloudHeight
+  };
 
 if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   bMenu();
 }
 
-if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
-  infoScreen();
-  if(infoButtonShow==true){infoButton()};
-  }
 } //draw END
 
 function titleScreen() {
   titleScreenOn = true; //ogni schermata mette se stessa come true e le altre come false
-  radarOn=false;
-  demoOn=false;
   climbOn=false;
-  backMenu=false;
-  infoOn=false;
   c+=0.1;
   if(c>400) {c=-400};
   push();
@@ -177,24 +174,14 @@ function backArrow() {
   // strokeWeight(1);
   // rect(-width/2.15-12,-height/2.25-27,40,52);
   hit_back = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.15-12,-height/2.25-27,40,52); //funzione di collide2D.p5
-  if(hit_back==true && mouseIsPressed==false) { //effetti della collisione
+  if(hit_back==true) { //effetti della collisione
 
-      if(demoOn==true && climbOn==false || radarOn==true){ //se il pulsante si trova nel menu della demo o nel radar si torna al titleScreen
-      titleScreen();
-
-      startFader=false;
-      demoFader=false;
-      opb=0;
+      if(demoTitlesOn==true && climbOn==false || radarOn==true){ //se il pulsante si trova nel menu della demo o nel radar si torna al titleScreen
+      demoTitlesOn=false;
+      titleScreenOn=true;
       radarOn=false;
-      demoOn=false;
-      climbOn=false;
-      r=65;
-    }
-    // else if(climbOn==true) {
-    //   climbOn=false;
-    //   demoOn=true;
-    //   demoTitles();
-    // }
+      setTimeout(function() {r=65},200);
+    };
 
     if(climbOn==true) { //se il pulsante si trova nella schermata della scalata attiva il menu per tornare indietro
     backMenu=true;
@@ -211,8 +198,9 @@ var r = 65;
 function demoTitles(){
   titleScreenOn = false;
   radarOn=false;
-  demoOn=true;
-  // climbOn=false;
+  infoOn=false;
+  backMenu=false;
+  climbOn=false;
   var hyperionTitle;
   var hit_hyperion=false;
   var hit_burj=false;
@@ -221,22 +209,25 @@ function demoTitles(){
   push();
   textAlign(CENTER);
   backArrow();
-  fill(colorList[3]);
+
   textSize(52);
+  fill(45,45,45,45);
+  text('demo',0+2,-height/3.2+2);
+  fill(colorList[3]);
   text('demo',0,-height/3.2);
   noStroke();
 
   fill(45,45,45,45);
-  rect(0+1,-height/10+1,width/1.15,height/3.7,3); //drop shadow
+  rect(0+1,-height/10+1,width/1.15,138,3); //drop shadow
 
   fill(colorList[1]);
-  rect(0,-height/10,width/1.15,height/3.7,3);
+  rect(0,-height/10,width/1.15,138,3);
 
   fill(45,45,45,45);
-  rect(0+1,height/4.7+1,width/1.15,height/3.7,3); //drop-shadow
+  rect(0+1,height/4.7+1,width/1.15,138,3); //drop-shadow
 
   fill(colorList[1]);
-  rect(0,height/4.7,width/1.15,height/3.7,3);
+  rect(0,height/4.7,width/1.15,138,3);
 
   imageMode(CENTER);
   textAlign(LEFT);
@@ -247,12 +238,12 @@ function demoTitles(){
   text('Burj Khalifa',width/11,height/3.8,width/3,height/4);
   push();
   scale(0.68);
-  image(hyperion_col,-width/2.5,-height/7.4);
+  image(sequoia_button,-width/2.5,-height/7.3);
   pop();
 
   push();
   scale(0.75);
-  image(burj_col,-width/2.7,height/3.63);
+  image(burijKalifa_button,-width/2.7,height/3.62);
 
   push();
   noFill();
@@ -263,13 +254,16 @@ function demoTitles(){
   hit_hyperion = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.3,-height/4.2,width/1.15,height/3.65);
   if(hit_hyperion==true && mouseIsPressed) {
     fill(colorList[4]);
-    climbOn=true;
+    // climbMode(sequoia_bg,sequoia,50,true,1.25);
+    sequoiaDemoOn=true;
   };
   pop();
 
   hit_burj = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.3,height/13,width/1.15,height/3.65);
   if(hit_burj==true && mouseIsPressed) {
     fill(colorList[4]);
+    // climbMode(sequoia_bg,sequoia,50,true,1.25);
+    burjDemoOn=true;
   };
   pop();
 
@@ -279,23 +273,26 @@ function demoTitles(){
   pop();
 }
 var f=300;
-function climbMode() { //attualmente composta da un'interfaccia e una struttura
-  demoOn=false;
-  // background(colorList[0]);
-  // climbStructure();
-  // climbInterface();
-  // backArrow();
-  // completed();
-  if(f>1800){f=1800};
+function climbMode(struct_bg,struct_img,struct_height,cloudBool,cloudHeight) { //attualmente composta da un'interfaccia e una struttura
+  demoTitlesOn=false;
+  radarOn=false;
+  climbOn=true;
+
+  structTitle=struct_img;
+
+  if(f>1800){f=1800} else{f+=50;}
   if(f>1000){
     background(colorList[0]);
-    climbStructure();
-    climbInterface();
+    climbStructure(struct_bg,struct_img,cloudBool,cloudHeight); //background, immagine struttura, nuvole?
+    climbInterface(struct_height); //altezza struttura
     backArrow();
-    // completed();
+    completed();
+    if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
+      infoScreen();
+      if(infoButtonShow==true){infoButton()};
+      }
   };
   push();
-  f+=50;
   rectMode(CORNER);
   fill(colorList[0]);
   noStroke();
@@ -306,53 +303,60 @@ function climbMode() { //attualmente composta da un'interfaccia e una struttura
 
 };
 
-function climbInterface() {
-  var strHeight=50; //strHeight dovrà andare a prendere l'effettiva altezza della struttura per settarla come punto di arrivo finale
+function climbInterface(struct_height) { //struct_height dovrà andare a prendere l'effettiva altezza della struttura per settarla come punto di arrivo finale
+
   textAlign(CENTER);
   push();
   translate(0,-height/2.6);
   textFont(ubuntuBoldItalic);
-  textSize(38);
+  textSize(40);
   fill(colorList[5]);
-  text(strHeight+'m',0,0);
+  text(struct_height+'m',0,0);
   pop();
 }
+var cloudSwitch=false;
+function climbStructure(struct_bg,struct_img,cloudBool,cloudHeight) {
 
-function climbStructure() {
   push();
   imageMode(CENTER);
-  push();
 
+  cloudSwitch=cloudBool;
+
+  if(cloudSwitch==true) {
+  //cloud
+  push();
+  c+=0.1;
+  if(c>200) {c=-700};
   scale(0.5);
-  image(cloud,width/1.4,-height/1.25);
+  image(cloud,width/1.4+c,-height/cloudHeight);
   pop();
+  }
 
+  //background
   push();
-  if(innerHeight<=512) {
-    scale(width/1000);
-  // translate(0,-height/20);
-
-
-}
-else{
-  scale(width/850);
-
-}
-  translate(0,-height/20);
-  image(sequoia_climb,0,height/50);
-  pop();
-
-  push();
-  if(innerHeight<=512) {
+  if(innerWidth<=360) {
   translate(0,-height/8.3);
 }
 else{
-  translate(0,-height/23);
+  translate(0,-height/40);
 }
-  scale(width/1080);
-  image(sequoia_bg,0,0);
-
+  scale(width/720);
+  image(struct_bg,0,0);
   pop();
+
+  //structure
+  push();
+  if(innerWidth<=360) {
+    scale(width/1000);
+  }
+
+else{
+  scale(width/850);
+}
+  translate(0,height/6);
+  image(struct_img,0,-height/40);
+  pop();
+
   pop();
 };
 var movY=0;
@@ -373,7 +377,7 @@ function completed() {
         movY=0;
         setTimeout(function() {
           infoOn=true;
-        },500)
+        },400)
       };
     }
   // console.log(movY);
@@ -452,7 +456,7 @@ function infoScreen() {
   // strokeWeight(1);
   // rect(-width/9,height/18,width/4.5,height/11);
   hit_infoOk = collidePointRect(mouseX-width/2,mouseY-height/2,-width/9,height/18,width/4.5,height/11); //funzione di collide2D.p5
-  if(hit_infoOk==true && mouseIsPressed==false) {
+  if(hit_infoOk==true) {
     infoOpen=false;
     infoButtonShow=true;
   } //effetti della collisione
@@ -485,9 +489,10 @@ function infoButton() {
 }
 
 function radar() {
+  backMenuOn=false;
+  infoOn=false
   titleScreenOn = false;
-  radarOn=true;
-  demoOn=false;
+  demoTitlesOn==false;
   climbOn=false;
   radarQuadrant();
   var locationTitle;
@@ -563,9 +568,9 @@ function radar() {
   fill(235,235,235);
   ellipse(0,height/11,70+width/1-230-r);
   fill(123,206,239,rOp);
-  ellipse(0,height/11,70+width/1-rSignal-r);
+  ellipse(0,height/11,70+180-rSignal-r);
   fill(235,235,235);
-  ellipse(0,height/11,70+width/1-380-r);
+  ellipse(0,height/11,70+270-380-r);
   }
 }
 
@@ -584,9 +589,9 @@ function startButton(txtLabel) {
   hit_start = collidePointRect(mouseX-width/2,mouseY-height/2,-83,98,166,53);
   pop();
 
-  if(mouseIsPressed && hit_start==true) {
+  if(hit_start==true) {
     fill(89,210,220);
-    setTimeout(function() {startFader=true;},transTime);
+    setTimeout(function() {radarOn=true;},transTime);
 }
   rect(0,125,165,50,3);
   fill(colorList[2]);
@@ -608,9 +613,9 @@ function demoButton(txtLabel) {
   hit_demo = collidePointRect(mouseX-width/2,mouseY-height/2,-62,155,123,38);
   pop();
 
-  if(mouseIsPressed==true && hit_demo==true) {
+  if(hit_demo==true) {
     fill(colorList[4]);
-    setTimeout(function() {demoFader=true;},transTime);
+    setTimeout(function() {demoTitlesOn=true;},transTime);
 }
 
   rect(0,185,115,35,3);
@@ -666,8 +671,21 @@ var backTxt,
 var hit_yes=false;
 var hit_no=false;
 
-if(eng==true) {backTxt="Back to demo screen?"; yesTxt="yes"; textSize(24);};
-if(ita==true) {backTxt="Tornare alle demo?"; yesTxt="sì"; textSize(21);};
+if(eng==true) {
+  if(sequoiaDemoOn==false && burjDemoOn==false) {
+    backTxt="Back to radar?"; yesTxt="sì"; textSize(21);
+  }
+  else{backTxt="Back to demos?";}
+  yesTxt="yes"; textSize(24);
+};
+
+if(ita==true) {
+  if(sequoiaDemoOn==false && burjDemoOn==false) {
+  backTxt="Tornare al radar?"; yesTxt="sì"; textSize(21);
+  }
+  else{backTxt="Tornare alle demo?";}
+  yesTxt="sì"; textSize(24);
+};
 noStroke();
 rectMode(CENTER);
 fill(45,45,45,45);
@@ -698,7 +716,24 @@ rectMode(CORNER);
 // rect(width/16,-height/11,width/4.7,height/10);
 hit_yes = collidePointRect(mouseX-width/2,mouseY-height/2,-width/3.7,-height/11,width/4.7,height/10);
 if(hit_yes==true && mouseIsPressed==false) {
-  titleScreen();
+  if(sequoiaDemoOn==false && burjDemoOn==false) {
+    burjDemoOn=false;
+    titleScreenOn=false;
+    demoTitlesOn=false;
+    infoOn=false;
+    backMenu=false;
+    radarOn=true;
+
+    f=300;
+  }
+  else {
+  sequoiaDemoOn=false;
+  burjDemoOn=false;
+  titleScreenOn=false;
+  demoTitlesOn=true;
+
+  f=300;
+  }
 };
 hit_no = collidePointRect(mouseX-width/2,mouseY-height/2,width/16,-height/11,width/4.7,height/10);
 if(hit_no==true && mouseIsPressed==false) {
@@ -712,7 +747,6 @@ pop();
 function windowResized() {resizeCanvas(innerWidth,innerHeight)} //ridimensionatore della schermata
 
 function drawIconOnRadar() {
-  var hit_struct=false;
   var circle = (70+width/1-r),
       posXPointer = 0;
       posYPointer = height/11;
@@ -721,6 +755,8 @@ function drawIconOnRadar() {
     imageMode(CENTER)
     translate(posXPointer,posYPointer)
     for (var i=0; i < myData.landmarks_en.length; i++) { //Disegna tutte le icone
+
+      hit_struct[i] = false;
 
       if (dist(0,0,(posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1))>(circle/2)) {  //Se l'icona è fuori dal radar
         if (myData.landmarks_en[i].visit==false) {
@@ -754,18 +790,22 @@ function drawIconOnRadar() {
         } //Se l'icona è stat visitata
     }
     push();
-    //noFill();
-    //stroke(45,45,45);
-    //strokeWeight(2);
-    //rectMode(CENTER);
-    //rect( (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80 );
-    hit_struct=collidePointRect(mouseX-width/2,mouseY-height/2,(posRelMe[i].Lon)*zoom-20,(posRelMe[i].Lat)*zoom*(-1)-17,40,80)
-    if(hit_struct==true && mouseIsPressed){
-      console.log('OK');
-    }
+    noFill();
+    stroke(45,45,45);
+    strokeWeight(2);
+    rectMode(CENTER);
+    rect( (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80 );
+    hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-height/2,(posRelMe[i].Lon)*zoom-20,(posRelMe[i].Lat)*zoom*(-1)-17,40,80)
+    if(hit_struct[i]==true){
+      push();
+      translate(0,-posYPointer) //counter posYPointer
+      climbMode(imgLinkBack[i],imgLink[i],50,true,1.25);
+      pop();
+    };
     pop();
   }
-  pop()
+  console.log(hit_struct);
+  pop();
 }
 
 //Aggiungi dati al oggetto posRelMe per calcolare tutti i dati che ci servono per le icone sul radar:
