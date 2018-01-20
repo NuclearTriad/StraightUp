@@ -121,6 +121,8 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   bMenu();
 }
 
+  // console.log('infoOn: '+infoOn);
+  // console.log('infoButtonShow: '+infoButtonShow);
 } //draw END
 
 function titleScreen() {
@@ -274,7 +276,7 @@ function demoTitles(){
 var f=300;
 function climbMode(struct_bg,struct_img,struct_height,cloudBool,cloudHeight) { //attualmente composta da un'interfaccia e una struttura
   demoTitlesOn=false;
-  radarOn=true;
+  radarOn=false;
   climbOn=true;
 
   if(f>1800){f=1800} else{f+=50;}
@@ -284,9 +286,9 @@ function climbMode(struct_bg,struct_img,struct_height,cloudBool,cloudHeight) { /
     climbInterface(struct_height); //altezza struttura
     backArrow();
     completed();
-    if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
-      infoScreen();
-      if(infoButtonShow==true){infoButton()};
+      if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
+        infoScreen();
+        if(infoButtonShow==true){infoButton()};
       }
   };
   push();
@@ -372,9 +374,7 @@ function completed() {
       movY-=2;
       if(movY<=0) {
         movY=0;
-        setTimeout(function() {
-          infoOn=true;
-        },400)
+        infoOn=true;
       };
     }
   // console.log(movY);
