@@ -142,6 +142,17 @@ function draw() {
     climbMode(8,true,15,2,-550,400); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   };
 
+  for (var i=0; i < myData.landmarks_en.length; i++){
+      if(hit_struct[i]==true){
+          radarOn=false;
+          console.log("cliccato "+i);
+          push();
+          //translate(0,-posYPointer) //counter posYPointer
+          climbMode(i,true,2,1.25,-700,200); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
+          pop();
+        };
+    };
+
 if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   bMenu();
 }
@@ -790,6 +801,7 @@ rect(0+2,-height/12+2,width/1.2,height/4,3);
 fill(colorList[1]);
 rect(0,-height/12,width/1.2,height/4,3);
 fill(45,45,45);
+textAlign(CENTER);
 text(backTxt,0,-height/8);
 
 push();
@@ -802,6 +814,7 @@ rect(width/6,-height/25,width/5,height/12,3);
 push();
 noStroke();
 fill(45,45,45,125);
+textAlign(CENTER);
 text(yesTxt,-width/6,-height/35);
 text('no',width/6,-height/35);
 pop();
@@ -814,6 +827,7 @@ rectMode(CORNER);
 hit_yes = collidePointRect(mouseX-width/2,mouseY-height/2,-width/3.7,-height/11,width/4.7,height/10);
 if(hit_yes==true) {
   if(sequoiaDemoOn==false && burjDemoOn==false) {
+    setTimeout(function() {
     burjDemoOn=false;
     titleScreenOn=false;
     demoTitlesOn=false;
@@ -824,15 +838,19 @@ if(hit_yes==true) {
 
     f=300;
     hit_yes=false;
+    },100);
   }
+
   else {
   setTimeout(function() {
   sequoiaDemoOn=false;
   burjDemoOn=false;
   titleScreenOn=false;
   demoTitlesOn=true;
+
   f=300;
-  },50);
+  hit_yes=false;
+  },100);
   }
 };
 hit_no = collidePointRect(mouseX-width/2,mouseY-height/2,width/16,-height/11,width/4.7,height/10);
@@ -897,14 +915,14 @@ function drawIconOnRadar() {
     // // rectMode(CENTER);
     // rect( (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80 );
     hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-height/2,(posRelMe[i].Lon)*zoom-20,(posRelMe[i].Lat)*zoom*(-1)-17,40,80)
-    if(hit_struct[i]==true){
-
-      push();
-      translate(0,-posYPointer) //counter posYPointer
-      climbMode(i,true,2,1.25,-700,200); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
-      pop();
-      hit_struct[i]=false;
-    };
+    // if(hit_struct[i]==true){
+    //
+    //   push();
+    //   translate(0,-posYPointer) //counter posYPointer
+    //   climbMode(i,true,2,1.25,-700,200); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
+    //   pop();
+    //   hit_struct[i]=false;
+    // };
     pop();
   }
   console.log(hit_struct);
