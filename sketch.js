@@ -11,6 +11,7 @@ var colorList = ['#9FD3D6','#EAEEEF','#F48021','#F29C4E','#FAFAFB','#488282']; /
 var titleScreenOn = true;
 var infoOn=false;
 var infoButtonShow=false;
+var instOn=true;
 var c=-150;
 var sequoiaDemoOn=false;
 var burjDemoOn=false;
@@ -64,6 +65,8 @@ function preload() { //tutti i preload delle immagini e i font
   cloud = loadImage('./assets/cloud.png');
   infoButtonIco = loadImage('./assets/infoButtonIco.png');
   SU_logo = loadImage('./assets/SU_logo.png');
+  camminaIco = loadImage('./assets/camminaIco.png');
+  drittoIco = loadImage('./assets/drittoIco.png');
 
   myData = loadJSON('./assets/heights.json');
 
@@ -101,22 +104,34 @@ function setup() { //tutti i default dell'interfaccia
   }
 
 function draw() {
+
+  if(mouseIsPressed==false) {mouseX=-1; mouseY=-1;}
+
   translate(width/2,height/2);
   background(colorList[0]);
+  // instructions();
   // infoOn=true;
   // climbMode(sequoia_bg,sequoia,50,true,2,1.25,-700,200);
   // demoTitles();
   // radar();
+  // titleScreenOn=false;
   if(titleScreenOn==true) {
     titleScreen();
   };
 
   if(radarOn==true){
-    radar();
+    if(instOn==true) {
+      instructions();
+    }
+    else{radar();}
+
   };
 
   if(demoTitlesOn==true){
-    demoTitles();
+    if(instOn==true) {
+      instructions();
+    }
+    else{demoTitles();}
   };
 
   if(sequoiaDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
@@ -192,6 +207,7 @@ function backArrow() {
       titleScreenOn=true;
       radarOn=false;
       setTimeout(function() {r=65},200);
+      hit_back=false;
     };
 
     if(climbOn==true) { //se il pulsante si trova nella schermata della scalata attiva il menu per tornare indietro
@@ -212,6 +228,7 @@ function demoTitles(){
   infoOn=false;
   backMenu=false;
   climbOn=false;
+  no_hype=true;
   var hyperionTitle;
   var hit_hyperion=false;
   var hit_burj=false;
@@ -263,20 +280,22 @@ function demoTitles(){
   // strokeWeight(1);
   // rect(-width/2.3,-height/4.2,width/1.15,height/3.65);
   hit_hyperion = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.3,-height/4.2,width/1.15,height/3.65);
-  if(hit_hyperion==true && mouseIsPressed) {
+  if(hit_hyperion==true) {
     fill(colorList[4]);
     // climbMode(sequoia_bg,sequoia,50,true,2,1.25,-700,200);
     sequoiaDemoOn=true;
     // infoOpen=false;
+    hit_hyperion=false;
   };
   pop();
 
   hit_burj = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.3,height/13,width/1.15,height/3.65);
-  if(hit_burj==true && mouseIsPressed) {
+  if(hit_burj==true) {
     fill(colorList[4]);
     // climbMode(sequoia_bg,sequoia,50,true,2,1.25,-700,200);
     burjDemoOn=true;
     // infoOpen=false;
+    hit_burj=false;
   };
   pop();
 
@@ -468,6 +487,7 @@ function infoScreen(structNum) {
   if(hit_infoOk==true) {
     infoOpen=false;
     infoButtonShow=true;
+    hit_infoOk=false;
   } //effetti della collisione
 
 
@@ -492,10 +512,96 @@ function infoButton() {
   hit_infoButton=collidePointCircle(mouseX-width/2,mouseY-height/2,width/2.5,height/2.4,width/10);
   if(hit_infoButton==true) {
     infoOpen=true;
+    hit_infoButton=false;
   }
   pop();
 
 }
+
+function instructions() {
+
+
+  titleScreenOn = false;
+
+  if(eng==true) {
+    var topText="The human mind feels distance and height in different ways.",
+        questText="What happens if vertical becomes horizontal?",
+        titleText="Instructions";
+        camminaText="Choose a landmark and begin to walk. Stop when you've completed the whole height.";
+        drittoText="Tip: walk straight for the best experience.";
+  }
+  if(ita==true) {
+    var topText="La mente umana percepisce l'altezza e la distanza in modo differente",
+        questText="Cosa succede se il verticale diventa orizzontale?",
+        titleText="Istruzioni",
+        camminaText="Scegli un punto di riferimento e inizia a camminare. Fermati quando avrai completato l'intera altezza",
+        drittoText="Suggerimento: per un'esperienza migliore cammina in linea retta.";
+  }
+
+  //icons
+  push();
+  imageMode(CENTER);
+  background(colorList[0]);
+  image(camminaIco,-width/3,height/60);
+  image(drittoIco,-width/3,height/60+110);
+  pop();
+
+  //text
+  push();
+  textSize(18);
+  textAlign(LEFT);
+  textFont(ubuntuMedium);
+  fill(224,108,13);
+  text(topText,0,-height/3,width-45,height/5);
+  textFont(ubuntuBoldItalic);
+  textSize(21);
+  text(titleText,0,-height/16,width-45,height/5);
+
+  fill(110,110,110);
+  textSize(18);
+  textFont(ubuntuRegularItalic);
+  text(questText,0,-height/4.8,width-45,height/5);
+
+  fill(110,110,100);
+  textSize(12);
+  textFont(ubuntuMedium);
+  text(camminaText,width/12,height/18,width-160,height/5);
+  text(drittoText,width/12,height/18+110,width-160,height/5);
+  pop();
+
+  instButtonStart();
+}
+
+function instButtonStart() {
+  if(ita==true) {var buttonText="start";}
+  if(eng==true) {var buttonText="inizia";}
+  //Button
+  var hitInstStart=false;
+  push();
+  rectMode(CENTER);
+  noStroke();
+  fill(45,45,45,45);
+  rect(0+1,height/2.6+1,120,40,4);
+  fill(colorList[1]);
+  rect(0,height/2.6,120,40,4);
+  fill(110,110,110);
+  textSize(23);
+  textAlign(CENTER);
+  text(buttonText,0,height/2.51)
+  pop();
+
+  push();
+  rectMode(CORNER);
+  // stroke(255);
+  // noFill();
+  // rect(-62,height/2.9,123,40);
+  hit_instStart=collidePointRect(mouseX-width/2,mouseY-height/2,-62,height/2.9,123,40);
+  if(hit_instStart==true) {
+    instOn=false;
+    hit_instStart=false;
+  }
+  pop();
+  }
 
 function radar() {
   backMenuOn=false;
@@ -536,28 +642,6 @@ function radar() {
     triangle(-9.5,height/123,9.5,height/123,0,height/123+16);
     pop();
   }
-  // function infoPoint(posX,posY) { //i parametri x e y assoluti per posizionare l'icona nel radar presi dall'angolo in alto a sx dell'icona
-  // var hit_infoPoint = false;
-  // push();
-  // fill(45,45,95,45);
-  // ellipse(posX+15,posY+80,35,20);
-  // image(infoPoint_nv,posX,posY);
-  // pop();
-  // push();
-  // rectMode(CORNER);
-  // // stroke(255);
-  // // noFill();
-  // // strokeWeight(1);
-  // // rect(width/45,height/20,width/10,-height/6);
-  // // rect(width/45,-height/8,width/10,height/5.6);
-  // // rect(posX,posY,28,80);
-  // hit_infoPoint = collidePointRect(mouseX-width/2,mouseY-height/2,posX,posY,28,80);
-  // if(hit_infoPoint==true && mouseIsPressed==true) {
-  //   console.log("infoPoint");
-  // }
-  // console.log(hit_infoPoint);
-  // pop();
-  // }
 
   function radarQuadrant() { //disegna il quadrante del radar. da valutare se utilizzare valori assoluti per facilitare la gestione con le coordinate GPS
     var rSignal=350;
@@ -601,6 +685,7 @@ function startButton(txtLabel) {
   if(hit_start==true) {
     fill(89,210,220);
     setTimeout(function() {radarOn=true;},transTime);
+    hit_start=false;
 }
   rect(0,125,165,50,3);
   fill(colorList[2]);
@@ -625,6 +710,7 @@ function demoButton(txtLabel) {
   if(hit_demo==true) {
     fill(colorList[4]);
     setTimeout(function() {demoTitlesOn=true;},transTime);
+    hit_demo=false;
 }
 
   rect(0,185,115,35,3);
@@ -650,6 +736,7 @@ function flag_ita(faded) { //faded è il parametro che serve per opacizzare le b
     faded_it=0;
     eng=false;
     ita=true;
+    hit_it=false;
   }
   pop();
 }
@@ -670,6 +757,7 @@ function flag_eng(faded) {
     faded_it=145;
     eng=true;
     ita=false;
+    hit_en=false;
   }
   pop();
 }
@@ -724,7 +812,7 @@ rectMode(CORNER);
 // strokeWeight(1);
 // rect(width/16,-height/11,width/4.7,height/10);
 hit_yes = collidePointRect(mouseX-width/2,mouseY-height/2,-width/3.7,-height/11,width/4.7,height/10);
-if(hit_yes==true && mouseIsPressed==false) {
+if(hit_yes==true) {
   if(sequoiaDemoOn==false && burjDemoOn==false) {
     burjDemoOn=false;
     titleScreenOn=false;
@@ -735,19 +823,22 @@ if(hit_yes==true && mouseIsPressed==false) {
     radarOn=true;
 
     f=300;
+    hit_yes=false;
   }
   else {
+  setTimeout(function() {
   sequoiaDemoOn=false;
   burjDemoOn=false;
   titleScreenOn=false;
   demoTitlesOn=true;
-
   f=300;
+  },50);
   }
 };
 hit_no = collidePointRect(mouseX-width/2,mouseY-height/2,width/16,-height/11,width/4.7,height/10);
-if(hit_no==true && mouseIsPressed==false) {
+if(hit_no==true) {
   backMenu=false;
+  hit_no=false;
 };
 pop();
 
@@ -812,6 +903,7 @@ function drawIconOnRadar() {
       translate(0,-posYPointer) //counter posYPointer
       climbMode(i,true,2,1.25,-700,200); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
       pop();
+      hit_struct[i]=false;
     };
     pop();
   }
