@@ -38,6 +38,12 @@ var myData, //segnaposto JSON
     imgLinkColore = [];
     imgLinkBack = [];
     imgLink = [];
+    nameLink_en = [];
+    descLink_en = [];
+    nameLink_it = [];
+    descLink_it = [];
+
+    heightLink = [];
 
     hit_struct = [];
 
@@ -53,13 +59,9 @@ function preload() { //tutti i preload delle immagini e i font
   flag_en = loadImage('./assets/lang_en.png');
   flag_it = loadImage('./assets/lang_it.png');
   pointer = loadImage('./assets/pointer.png');
-  sequoia_colore = loadImage('./assets/sequoia_colore.png');
   sequoia_button = loadImage('./assets/sequoia_button.png');
-  burijKalifa_colore = loadImage('./assets/burijKalifa_colore.png');
   burijKalifa_button = loadImage('./assets/burijKalifa_button.png');
   cloud = loadImage('./assets/cloud.png');
-  sequoia_bg = loadImage('./assets/sequoia_bg.png');
-  sequoia = loadImage('./assets/sequoia.png');
   infoButtonIco = loadImage('./assets/infoButtonIco.png');
   SU_logo = loadImage('./assets/SU_logo.png');
 
@@ -87,6 +89,14 @@ function setup() { //tutti i default dell'interfaccia
     imgLinkColore[i] = loadImage(imgLinkColore[i]);
     imgLinkBack[i] = loadImage(imgLinkBack[i]);
     imgLink[i] = loadImage(imgLink[i]);
+
+    nameLink_en.push(myData.landmarks_en[i].name);
+    descLink_en.push(myData.landmarks_en[i].Description);
+
+    nameLink_it.push(myData.landmarks_it[i].name);
+    descLink_it.push(myData.landmarks_it[i].Description);
+
+    heightLink.push(myData.landmarks_en[i].height);
     }
   }
 
@@ -94,7 +104,7 @@ function draw() {
   translate(width/2,height/2);
   background(colorList[0]);
   // infoOn=true;
-  // climbMode(sequoia_bg,sequoia,50,true,1.25);
+  // climbMode(sequoia_bg,sequoia,50,true,2,1.25,-700,200);
   // demoTitles();
   // radar();
   if(titleScreenOn==true) {
@@ -110,11 +120,11 @@ function draw() {
   };
 
   if(sequoiaDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
-    climbMode(imgLinkBack[7],imgLink[7],50,true,1.25); //struct_bg,struct_img,struct_height,cloudBool,cloudHeight
+    climbMode(7,true,1.25,1.25,-700,200); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   };
 
   if(burjDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
-    climbMode(imgLinkBack[8],imgLink[8],150,true,2); //struct_bg,struct_img,struct_height,cloudBool,cloudHeight
+    climbMode(8,true,15,2,-550,400); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   };
 
 if(backMenu==true) { //se true fa comparire il menu per tornare indietro
@@ -255,16 +265,18 @@ function demoTitles(){
   hit_hyperion = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.3,-height/4.2,width/1.15,height/3.65);
   if(hit_hyperion==true && mouseIsPressed) {
     fill(colorList[4]);
-    // climbMode(sequoia_bg,sequoia,50,true,1.25);
+    // climbMode(sequoia_bg,sequoia,50,true,2,1.25,-700,200);
     sequoiaDemoOn=true;
+    // infoOpen=false;
   };
   pop();
 
   hit_burj = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.3,height/13,width/1.15,height/3.65);
   if(hit_burj==true && mouseIsPressed) {
     fill(colorList[4]);
-    // climbMode(sequoia_bg,sequoia,50,true,1.25);
+    // climbMode(sequoia_bg,sequoia,50,true,2,1.25,-700,200);
     burjDemoOn=true;
+    // infoOpen=false;
   };
   pop();
 
@@ -274,20 +286,20 @@ function demoTitles(){
   pop();
 }
 var f=300;
-function climbMode(struct_bg,struct_img,struct_height,cloudBool,cloudHeight) { //attualmente composta da un'interfaccia e una struttura
-  demoTitlesOn=false;
+function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   radarOn=false;
   climbOn=true;
 
   if(f>1800){f=1800} else{f+=50;}
   if(f>1000){
+    demoTitlesOn=false;
     background(colorList[0]);
-    climbStructure(struct_bg,struct_img,cloudBool,cloudHeight); //background, immagine struttura, nuvole?
-    climbInterface(struct_height); //altezza struttura
+    climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax);
+    climbInterface(structNum);
     backArrow();
     completed();
       if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
-        infoScreen();
+        setTimeout(infoScreen(structNum),400);
         if(infoButtonShow==true){infoButton()};
       }
   };
@@ -302,7 +314,7 @@ function climbMode(struct_bg,struct_img,struct_height,cloudBool,cloudHeight) { /
 
 };
 
-function climbInterface(struct_height) { //struct_height dovrà andare a prendere l'effettiva altezza della struttura per settarla come punto di arrivo finale
+function climbInterface(structNum) {
 
   textAlign(CENTER);
   push();
@@ -310,11 +322,11 @@ function climbInterface(struct_height) { //struct_height dovrà andare a prender
   textFont(ubuntuBoldItalic);
   textSize(40);
   fill(colorList[5]);
-  text(struct_height+'m',0,0);
+  text(heightLink[structNum]+'m',0,0);
   pop();
 }
 var cloudSwitch=false;
-function climbStructure(struct_bg,struct_img,cloudBool,cloudHeight) {
+function climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) {
 
   push();
   imageMode(CENTER);
@@ -325,9 +337,9 @@ function climbStructure(struct_bg,struct_img,cloudBool,cloudHeight) {
   //cloud
   push();
   c+=0.1;
-  if(c>200) {c=-700};
+  if(c>cloudMax) {c=cloudMin};
   scale(0.5);
-  image(cloud,width/1.4+c,-height/cloudHeight);
+  image(cloud,width/cloudX+c,-height/cloudY);
   pop();
   }
 
@@ -340,7 +352,7 @@ else{
   translate(0,-height/40);
 }
   scale(width/720);
-  image(struct_bg,0,0);
+  image(imgLinkBack[structNum],0,0);
   pop();
 
   //structure
@@ -353,7 +365,7 @@ else{
   scale(width/850);
 }
   translate(0,height/6);
-  image(struct_img,0,-height/40);
+  image(imgLink[structNum],0,-height/40);
   pop();
 
   pop();
@@ -407,16 +419,16 @@ function completed() {
 
 var infoOpen=true;
 
-function infoScreen() {
+function infoScreen(structNum) {
   if(infoOpen==true){
   var hit_infoOk=false;
   if(eng==true){
-    var infoTxt="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-    var structName="Redwood Hyperion";
+    var infoTxt=descLink_en[structNum];
+    var structName=nameLink_en[structNum];
   }
   if(ita==true){
-    var infoTxt="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-    var structName="Sequoia Hyperion";
+    var infoTxt=descLink_it[structNum];
+    var structName=nameLink_it[structNum];
   }
   push();
 
@@ -718,6 +730,7 @@ if(hit_yes==true && mouseIsPressed==false) {
     titleScreenOn=false;
     demoTitlesOn=false;
     infoOn=false;
+    infoOpen=false;
     backMenu=false;
     radarOn=true;
 
@@ -797,7 +810,7 @@ function drawIconOnRadar() {
 
       push();
       translate(0,-posYPointer) //counter posYPointer
-      climbMode(imgLinkBack[i],imgLink[i],50,true,1.25);
+      climbMode(i,true,2,1.25,-700,200); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
       pop();
     };
     pop();
@@ -861,7 +874,7 @@ function getLocationUpdate() {
       watchID = geoLoc.watchPosition(showLocation, errorHandler, options);
     }
 
-  else{alert("Sorry, browser does not support geolocation!");}
+  else{alert("Sorry, this browser does not support geolocation!");}
 }
 
 function showLocation(position) {
