@@ -105,7 +105,7 @@ function setup() { //tutti i default dell'interfaccia
 
 function draw() {
 
-  if(mouseIsPressed==false) {mouseX=-1; mouseY=-1;}
+  if(mouseIsPressed==false) {mouseX=-100; mouseY=-100;}
 
   translate(width/2,height/2);
   background(colorList[0]);
@@ -375,7 +375,7 @@ function climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) {
 
   //background
   push();
-  if(innerWidth<=360) {
+  if(innerHeight<=512) {
   translate(0,-height/8.3);
 }
 else{
@@ -387,7 +387,7 @@ else{
 
   //structure
   push();
-  if(innerWidth<=360) {
+  if(innerHeight<=512) {
     scale(width/1000);
   }
 
@@ -465,22 +465,22 @@ function infoScreen(structNum) {
   textFont(ubuntuBold);
   noStroke();
   fill(45,45,45,45);
-  rect(0+2,-height/15+2,width/1.1,height/1.8,3);
+  rect(0+2,-height/10+2,width/1.1,250,3);
   fill(colorList[1]);
-  rect(0,-height/15,width/1.1,height/1.8,3);
+  rect(0,-height/10,width/1.1,250,3);
   fill(45,45,45,175);
   textSize(14);
   textAlign(LEFT);
   text(infoTxt,0,height/25,width/1.3,height/2);
   textSize(26);
   fill(45,45,45,185);
-  text(structName,0,0,width/1.3,height/1.7);
+  text(structName,0,-height/120,width/1.3,height/1.7);
 
   push();
   noFill();
   stroke(45,45,45,45);
   strokeWeight(3);
-  rect(0,height/10,width/5,height/12,3);
+  rect(0,height/24,width/5,45,3);
   pop();
 
   push();
@@ -488,13 +488,13 @@ function infoScreen(structNum) {
   textSize(21);
   textAlign(CENTER);
   noStroke();
-  text('ok',0,height/8.7);
+  text('ok',0,height/18);
 
   rectMode(CORNER); //attiva il codice commentato sottostante per mostrare la posizione dell'area di collisione
   // stroke(255);
   // strokeWeight(1);
-  // rect(-width/9,height/18,width/4.5,height/11);
-  hit_infoOk = collidePointRect(mouseX-width/2,mouseY-height/2,-width/9,height/18,width/4.5,height/11); //funzione di collide2D.p5
+  // rect(-width/9,-height/280,width/4.5,45);
+  hit_infoOk = collidePointRect(mouseX-width/2,mouseY-height/2,-width/9,-height/280,width/4.5,45); //funzione di collide2D.p5
   if(hit_infoOk==true) {
     infoOpen=false;
     infoButtonShow=true;
@@ -559,7 +559,7 @@ function instructions() {
 
   //text
   push();
-  textSize(18);
+  textSize(17);
   textAlign(LEFT);
   textFont(ubuntuMedium);
   fill(224,108,13);
@@ -584,8 +584,8 @@ function instructions() {
 }
 
 function instButtonStart() {
-  if(ita==true) {var buttonText="start";}
-  if(eng==true) {var buttonText="inizia";}
+  if(ita==true) {var buttonText="inizia";}
+  if(eng==true) {var buttonText="start";}
   //Button
   var hitInstStart=false;
   push();
