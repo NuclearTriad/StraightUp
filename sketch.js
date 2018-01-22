@@ -535,7 +535,7 @@ function instructions() {
   titleScreenOn = false;
 
   if(eng==true) {
-    var topText="The human mind feels distance and height in different ways.",
+    var topText="The human mind perceives distance and height in different ways.",
         questText="What happens if vertical becomes horizontal?",
         titleText="Instructions";
         camminaText="Choose a landmark and begin to walk. Stop when you've completed the whole height.";
