@@ -50,9 +50,9 @@ var myData, //segnaposto JSON
     heightLink = [];
 
     hit_struct = [];
-    
+
     //variabili scalata+geolocalizzazione
-    
+
 var latitude,
     longitude,
     accuracy,
@@ -105,7 +105,7 @@ function preload() { //tutti i preload delle immagini e i font
 
 function setup() { //tutti i default dell'interfaccia
   mask = createGraphics(720, 1280); //crea il segnaposto per la mascherma sotto (le grandezze qui si ripetono poi sotto)
-    
+
   createCanvas(innerWidth,innerHeight);
   rectMode(CENTER);
   textAlign(CENTER);
@@ -136,7 +136,7 @@ function setup() { //tutti i default dell'interfaccia
   }
 
 function draw() {
-    
+
   if(mouseIsPressed==false) {mouseX=-100; mouseY=-100;}
 
   translate(width/2,height/2);
@@ -195,12 +195,16 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   bMenu();
 }
   push();
-  text('latitude: ' + latitude, 0, 30);
-  text('longitude: ' + longitude, 0, 30 * 2);
-  text('stabile: ' + stabilizzato + scelto, 0, 30 * 3);
-  text('accuracy: ' + accuracy, 0, 30 * 4);
-  text('Aggiornamenti: ' + numeroAgg, 0, 30 * 5);
-  text('Distanza Precedente: ' + metriPrec, 0, 30 * 6);
+  translate(-width/2,-height/2);
+  textAlign(LEFT);
+  textSize(12);
+  textFont(ubuntuRegular);
+  text('latitude: ' + latitude, 5, 30);
+  text('longitude: ' + longitude, 5, 30 * 2);
+  text('stabile: ' + stabilizzato + scelto, 5, 30 * 3);
+  text('accuracy: ' + accuracy, 5, 30 * 4);
+  text('Aggiornamenti: ' + numeroAgg, 5, 30 * 5);
+  text('Distanza Precedente: ' + metriPrec, 5, 30 * 6);
   pop();
   // console.log('infoOn: '+infoOn);
   // console.log('infoButtonShow: '+infoButtonShow);
@@ -364,9 +368,9 @@ var f=300;
 function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   radarOn=false;
   climbOn=true;
-  
-  
-    
+
+
+
   if(f>1800){f=1800} else{f+=50;}
   if(f>1000){
     demoTitlesOn=false;
@@ -387,10 +391,10 @@ function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //stru
   rectMode(CORNER);
   fill(colorList[0]);
   noStroke();
-    
+
   rect(width,height-f,-width*2,800);
   pop();
-    
+
 
 };
 
@@ -432,7 +436,7 @@ else{
   translate(0,-height/40);
 }
   scale(width/720);
-  
+
   image(imgLinkBack[structNum],0,0);
   pop();
 
@@ -674,6 +678,7 @@ function radar() {
   titleScreenOn = false;
   demoTitlesOn==false;
   climbOn=false;
+  zoomButtons();
   radarQuadrant();
   var locationTitle;
   var locationTxt;
@@ -695,6 +700,53 @@ function radar() {
   rot+=0.01;
   pointerIcon(heading); //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
   drawIconOnRadar()
+
+  function zoomButtons() {
+    push();
+    var hit_zoomMinus=false;
+    fill(45,45,45,45);
+    ellipse(-width/2.35+1,-height/3.7+1,38.3);
+    fill(245,245,245);
+    stroke(220,220,220);
+    strokeWeight(2);
+    ellipse(-width/2.35,-height/3.7,35);
+    textAlign(CENTER);
+    textFont(ubuntuRegular);
+    textSize(32);
+    noStroke();
+    fill(175,175,175);
+    text('-',-width/2.35,-height/3.7+10);
+    // stroke(45);
+    // noFill();
+    // ellipse(-width/2.35,-height/5.2,35);
+    hit_zoomMinus=collidePointCircle(mouseX-width/2,mouseY-height/2,-width/2.35,-height/3.7,35);
+    if(hit_zoomMinus==true) {
+      console.log('-: '+hit_zoomMinus);
+      zoomOut();
+    }
+    pop();
+
+    push();
+    var hit_zoomPlus=false;
+    fill(45,45,45,45);
+    ellipse(-width/3.4+1,-height/3+1,38.3);
+    fill(245,245,245);
+    stroke(220,220,220);
+    strokeWeight(2);
+    ellipse(-width/3.4,-height/3,35);
+    textAlign(CENTER);
+    textFont(ubuntuRegular);
+    noStroke();
+    fill(175,175,175);
+    textSize(32);
+    text('+',-width/3.4,-height/3+9);
+    hit_zoomPlus=collidePointCircle(mouseX-width/2,mouseY-height/2,-width/3.4,-height/3,35);
+    if(hit_zoomPlus==true) {
+      console.log('+: '+hit_zoomPlus);
+      zoomIn();
+    }
+    pop();
+  }
 
   function pointerIcon(rotation) { //funzione che disegna il puntatore
     push();
@@ -983,7 +1035,7 @@ function drawIconOnRadar() {
     // };
     pop();
   }
-  console.log(hit_struct);
+  // console.log(hit_struct);
   pop();
 }
 
@@ -1067,7 +1119,7 @@ function showLocation(position) {
           conv = map(metriTOT, 0, myData.landmarks_en[scelto].height, 0, myData.landmarks_en[scelto].hPx); //converte la distanza in m in pixel di scalata
         }
     }
-    
+
   }
 
 function errorHandler(err) {
