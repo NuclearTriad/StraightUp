@@ -938,6 +938,7 @@ if(hit_yes==true) {
   scelto=-1;
   backUpPositionDist=[];
   mask.clear();
+  conv=0;
   check_scal=false;
   if(sequoiaDemoOn==false && burjDemoOn==false) {
     setTimeout(function() {
