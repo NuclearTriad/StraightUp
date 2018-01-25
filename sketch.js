@@ -69,7 +69,7 @@ var latitude,
     stabilizzato = false, //inizia con la propriteà non stabilizzata
     backUpstabilizzation = [], //crea la array dei valori per stabilizzare
     stabilizzationTOT = 0,
-    accuracyLimit = 0.2, //valore in metri che deve avere la sommatoria della array precedente per essere considerata accettabile
+    accuracyLimit = 0.5, //valore in metri che deve avere la sommatoria della array precedente per essere considerata accettabile
     maxStabilizzationArray = 4, //massimo numero di valori che l'array di sopra può tenere (maggiore è più preciso è)
 
     conv=0, //conversione da m in pixel di scalata
@@ -169,13 +169,13 @@ function draw() {
 
   if(sequoiaDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
     check_scal=true;
-    scelto=7;
+    scelto=7; 
     climbMode(7,true,1.25,1.25,-700,200); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   };
 
   if(burjDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
     check_scal=true;
-    scelto=8;
+    scelto=8; 
     climbMode(8,true,15,2,-550,400); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   };
 
@@ -935,11 +935,17 @@ rectMode(CORNER);
 hit_yes = collidePointRect(mouseX-width/2,mouseY-height/2,-width/3.7,-height/11,width/4.7,height/10);
 if(hit_yes==true) {
   metriTOT=0;
-  scelto=-1;
+  
   backUpPositionDist=[];
+  //mask.rect(0, 1280, 720, 1280);
+  //( imgClone = imgLink[scelto].get() ).mask( mask.get() );
+  //imgClone = createGraphics(720, 1280);
+  scelto=-1;
   mask.clear();
+  imgClone.clear();
   conv=0;
   check_scal=false;
+  
   if(sequoiaDemoOn==false && burjDemoOn==false) {
     setTimeout(function() {
     burjDemoOn=false;
@@ -963,6 +969,7 @@ if(hit_yes==true) {
   demoTitlesOn=true;
 
   f=300;
+  
   hit_yes=false;
   },100);
   }
@@ -1122,7 +1129,7 @@ function showLocation(position) {
           if (isNaN(metriPrec)==false) {backUpPositionDist.push(metriPrec);} //se gli aggiornamenti hanno raggiunto la quota di 15. inizia ad aggiungere le distanze percorse alla Array di tutte le distanze
           metriTOT = backUpPositionDist.sum(); //fai la sommatoria della Array di tutte le distanze percorse per sapere la distanza totale percorsa
             
-          conv = map(metriTOT, 0, myData.landmarks_en[scelto].height, 0, myData.landmarks_en[scelto].hPx); //converte la distanza in m in pixel di scalata
+          conv = map(metriTOT, 0, myData.landmarks_en[scelto].height, 0, 1000); //converte la distanza in m in pixel di scalata
           //conv=100;
           
           
@@ -1132,6 +1139,9 @@ function showLocation(position) {
            //imposta la maschera appena creata al immagine imgClone
 
 
+       }
+       if(metriTOT>=myData.landmarks_en[scelto].height){
+           metriTOT=myData.landmarks_en[scelto].height;
        }
     }
   }
