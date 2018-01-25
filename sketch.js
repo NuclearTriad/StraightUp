@@ -942,7 +942,7 @@ if(hit_yes==true) {
   //imgClone = createGraphics(720, 1280);
   scelto=-1;
   mask.clear();
-  imgClone.clear();
+  //imgClone.clear();
   conv=0;
   check_scal=false;
   
