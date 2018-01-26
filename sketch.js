@@ -69,7 +69,7 @@ var latitude,
     stabilizzato = false, //inizia con la propriteà non stabilizzata
     backUpstabilizzation = [], //crea la array dei valori per stabilizzare
     stabilizzationTOT = 0,
-    accuracyLimit = 0.5, //valore in metri che deve avere la sommatoria della array precedente per essere considerata accettabile
+    accuracyLimit = 0.4, //valore in metri che deve avere la sommatoria della array precedente per essere considerata accettabile
     maxStabilizzationArray = 4, //massimo numero di valori che l'array di sopra può tenere (maggiore è più preciso è)
 
     conv=0, //conversione da m in pixel di scalata
@@ -1184,6 +1184,8 @@ function showLocation(position) {
        }
        if(metriTOT>=myData.landmarks_en[scelto].height){
            metriTOT=myData.landmarks_en[scelto].height;
+           conv=myData.landmarks_en[scelto].hPx;
+           ( imgClone = imgLink[scelto].get() ).mask( mask.get() );
        }
     }
   }
