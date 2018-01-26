@@ -70,7 +70,7 @@ var latitude,
     stabilizzato = false, //inizia con la propriteà non stabilizzata
     backUpstabilizzation = [], //crea la array dei valori per stabilizzare
     stabilizzationTOT = 0,
-    accuracyLimit = 0.4, //valore in metri che deve avere la sommatoria della array precedente per essere considerata accettabile
+    accuracyLimit = 0.2, //valore in metri che deve avere la sommatoria della array precedente per essere considerata accettabile
     maxStabilizzationArray = 4, //massimo numero di valori che l'array di sopra può tenere (maggiore è più preciso è)
 
     conv=0, //conversione da m in pixel di scalata
@@ -1154,11 +1154,11 @@ function zoomOut() {
 
 function stabilizzation() {
   if (stabilizzato==false) { //Stabilizzazione
-    if (isNaN(accuracy)==false) {backUpstabilizzation.push(accuracy);} //se la distanza è un valore numerico mettila nell Array della stabilizzazione
+    if (isNaN(metriPrec)==false) {backUpstabilizzation.push(metriPrec);} //se la distanza è un valore numerico mettila nell Array della stabilizzazione
     if (backUpstabilizzation.length>maxStabilizzationArray) {backUpstabilizzation.shift()}
-    if ((backUpstabilizzation.length==4)&&(stabilizzationTOT<accuracyLimit)) {stabilizzato=true; console.log("stabilizzato");}; //se la sommatoria delle
+    if ((backUpstabilizzation.length==4)&&(stabilizzationTOT<accuracyLimit)) {stabilizzato=true; console.log("stabilizzato")}; //se la sommatoria delle
 
-    stabilizzationTOT = (backUpstabilizzation.sum()/backUpstabilizzation.length)-accuracy;
+    stabilizzationTOT = backUpstabilizzation.sum();
   }
 }
 
