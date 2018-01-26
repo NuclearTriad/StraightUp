@@ -30,9 +30,10 @@ var myData, //segnaposto JSON
     posXPointer, //posizione centro radar
     posYPointer, //posizione centro radar
 
-    zoom = 1024; //var zoom
-    limSupZoom = 2048;
-    limInfZoom = 524288;
+    zoom = 13564; //var zoom inizilae
+    limSupZoom = 1364;
+    limInfZoom = 131072;
+    zoomIncrement = 1.02;
 
     distCliccable = 50; //distanza dalla cui si può selezionare (in metri)
 
@@ -742,6 +743,10 @@ function radar() {
   // infoPoint(50,10);
   pop();
   rot+=0.01;
+
+  if (nordIsUp==true) {pointerIcon(heading);}  //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
+  else {pointerIcon(0);};
+
   drawIconOnRadar()
   pointerIcon(heading); //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
 
@@ -798,7 +803,7 @@ function radar() {
     ellipse(0,height/11,20,20);
     translate(0,height/11);
 
-    rotate(rotation);
+    rotate(rotation-180);
     // rect(0,height/45,20,20);
     triangle(-9.5,height/123,9.5,height/123,0,height/123+16);
     pop();
@@ -1028,44 +1033,58 @@ function windowResized() {resizeCanvas(innerWidth,innerHeight)} //ridimensionato
 function drawIconOnRadar() {
   var circle = (70+width/1-r),
       posXPointer = 0;
-      posYPointer = height/11;
+      posYPointer = height/11,
 
   push()
+
     imageMode(CENTER)
     translate(posXPointer,posYPointer)
     for (var i=0; i < myData.landmarks_en.length; i++) { //Disegna tutte le icone
+
+      var wImg = 40,
+          hImg = 80,
+          wElli = 65,
+          hElli = 15,
+
+          distCoord = dist(0,0, posRelMe[i].Lon, posRelMe[i].Lat)
+
+          xOut = (circle/2)*cos(posRelMe[i].Ang-90),
+          yOut = (circle/2)*sin(posRelMe[i].Ang-90)-(hImg/2),
+          xIn = (distCoord*zoom)*cos(posRelMe[i].Ang-90),
+          yIn = (distCoord*zoom)*sin(posRelMe[i].Ang-90)-(hImg/2);
+
 
       hit_struct[i] = false;
 
       if (dist(0,0,(posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1))>(circle/2)) {  //Se l'icona è fuori dal radar
         if (myData.landmarks_en[i].visit==false) {
           fill(45,45,95,70);
-          ellipse((circle/2)*cos(posRelMe[i].Ang-90),(circle/2)*sin(posRelMe[i].Ang-90),65,15);
-          image(imgLinkGray[i], (circle/2)*cos(posRelMe[i].Ang-90), (circle/2)*sin(posRelMe[i].Ang-90)-40,40,80);
+          ellipse(xOut, yOut+(hImg/2), wElli, hElli);
+          image(imgLinkGray[i], xOut, yOut , wImg, hImg);
         } //Se l'icona non è stat visitata
         else {
           fill(45,45,95,70);
-          ellipse((circle/2)*cos(posRelMe[i].Ang-90),(circle/2)*sin(posRelMe[i].Ang-90),65,15);
-          image(imgLinkColore[i], (circle/2)*cos(posRelMe[i].Ang-90), (circle/2)*sin(posRelMe[i].Ang-90)-40,40,80);
+          ellipse(xOut, yOut+(hImg/2), wElli, hElli);
+          image(imgLinkColore[i], xOut, yOut , wImg, hImg);
         } //Se l'icona è stat visitata
       }
 
       else if (posRelMe[i].dist<distCliccable) {
         fill(244,128,33,210);
-        ellipse((posRelMe[i].Lon)*zoom,((posRelMe[i].Lat)*zoom*(-1)),65,15);
-        image(imgLinkColore[i], (posRelMe[i].Lon)*zoom,((posRelMe[i].Lat)*zoom*(-1))-40,40,80);
+        ellipse(xIn, yIn+(hImg/2), wElli, hElli);
+        image(imgLinkGray[i], xIn, yIn , wImg, hImg);
       } //Se l'icona si trova nelle vicinanze
 
       else {  //Se l'icona è dentro il radar
         if (myData.landmarks_en[i].visit==false) {
           fill(45,45,95,70);
-          ellipse((posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1),65,15);
-          image(imgLinkGray[i], (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-40,40,80);
+          ellipse(xIn, yIn+(hImg/2), wElli, hElli);
+          image(imgLinkGray[i], xIn, yIn, wImg, hImg);
         } //Se l'icona non è stat visitata
-        else {
+      else {
           fill(45,45,95,70);
-          ellipse((posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1),65,15);
-          image(imgLinkColore[i], (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-40,40,80);
+          ellipse(xIn, yIn+(hImg/2), wElli, hElli);
+          image(imgLinkColore[i], xIn, yIn, wImg, hImg);
         } //Se l'icona è stat visitata
     }
     push();
@@ -1122,11 +1141,11 @@ function keyTyped() {
 }
 
 function zoomIn() {
-  if (zoom<limInfZoom) {zoom*=2; /*console.log(zoom)*/}
+  if (zoom<limInfZoom) {zoom*=zoomIncrement; /*console.log(zoom)*/}
   else {console.log("Limite zoom In raggiunto")}
 }
 function zoomOut() {
-  if (zoom>limSupZoom) {zoom/=2; /*console.log(zoom)*/}
+  if (zoom>limSupZoom) {zoom/=zoomIncrement; /*console.log(zoom)*/}
   else {console.log("Limite zoom Out raggiunto")}
 }
 
@@ -1160,6 +1179,7 @@ function showLocation(position) {
     metriPrec = Math.round(metriPrec*100)/100 //arrotonda la distanza precedente
 
     stabilizzation() //Stabilizzazione
+
     if(climbOn==true){
 
         console.log(conv);
