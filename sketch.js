@@ -202,7 +202,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   textFont(ubuntuRegular);
   text('latitude: ' + latitude, 5, 30);
   text('longitude: ' + longitude, 5, 30 * 2);
-  text('stabile: ' + stabilizzato + scelto, 5, 30 * 3);
+  text('stabile: ' + stabilizzato + "/" + climbOn, 5, 30 * 3);
   text('accuracy: ' + accuracy, 5, 30 * 4);
   text('Aggiornamenti: ' + numeroAgg, 5, 30 * 5);
   text('Distanza Precedente: ' + metriPrec, 5, 30 * 6);
@@ -1121,7 +1121,7 @@ function showLocation(position) {
     metriPrec = Math.round(metriPrec*100)/100 //arrotonda la distanza precedente
 
     stabilizzation() //Stabilizzazione
-    if(scelto!=-1){
+    if(climbOn==true){
         
         console.log(conv);
        if ((stabilizzato==true)&&(metriTOT<myData.landmarks_en[scelto].height)&&(metriPrec>accuracyLimit)&&check_scal==true) {
