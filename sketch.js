@@ -367,6 +367,7 @@ function demoTitles(){
   pop();
 }
 var f=300;
+var completedAnim=false;
 function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   radarOn=false;
   climbOn=true;
@@ -380,13 +381,14 @@ function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //stru
     climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax);
     climbInterface(structNum);
     backArrow();
-    if(metriTOT>=heightLink[structNum]){
+    if(metriTOT>=heightLink[structNum] && completedAnim==true){
         check_scal=false;
         completed();
     }
       if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
         setTimeout(infoScreen(structNum),400);
         if(infoButtonShow==true){infoButton()};
+        completedAnim=false;
         movY=0;
         movSwitcher=false;
       }
