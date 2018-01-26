@@ -98,6 +98,7 @@ function preload() { //tutti i preload delle immagini e i font
   SU_logo = loadImage('./assets/SU_logo.png');
   camminaIco = loadImage('./assets/camminaIco.png');
   drittoIco = loadImage('./assets/drittoIco.png');
+  nuclearTriad = loadImage('./assets/nuclearTriad.png');
 
   myData = loadJSON('./assets/heights.json');
 
@@ -214,6 +215,8 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
 } //draw END
 
 function titleScreen() {
+  if(eng==true) {var creditText = "credits";}
+  if(ita==true) {var creditText = "crediti";}
   titleScreenOn = true; //ogni schermata mette se stessa come true e le altre come false
   climbOn=false;
   c+=0.1;
@@ -238,6 +241,31 @@ function titleScreen() {
   demoButton('demo');
   flag_ita(faded_it);
   flag_eng(faded_en);
+
+  push();
+  var hit_cred = false;
+  textAlign(LEFT);
+  fill(79,86,106);
+  textSize(12);
+  text(creditText,-width/2.3,height/2.1);
+  // stroke(79,86,106);
+  // strokeWeight(1);
+  // line(-width/2.3,height/2.08,-width/3,height/2.08);
+  // noFill();
+  // stroke(255);
+  // strokeWeight(1);
+  // rectMode(CORNER);
+  // rect(-width/2.1,height/2.25,65,30);
+  hit_cred = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.1,height/2.25,65,30);
+  if(hit_cred==true) {
+    push();
+    background(255);
+    imageMode(CENTER);
+    scale(0.7);
+    image(nuclearTriad,0,-height/10);
+    pop();
+  }
+  pop();
 
   pop();
 }
@@ -368,7 +396,6 @@ function demoTitles(){
   pop();
 }
 var f=300;
-var completedAnim=false;
 function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   radarOn=false;
   climbOn=true;
@@ -384,17 +411,13 @@ function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //stru
     backArrow();
     if(metriTOT>=heightLink[structNum]){
         check_scal=false;
-        completedAnim=true;
-        if (completedAnim==true) {
+          movY=-300;
+          movSwitcher=false;
           completed();
-        }
     }
       if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
         setTimeout(infoScreen(structNum),400);
         if(infoButtonShow==true){infoButton()};
-        completedAnim=false;
-        movY=0;
-        movSwitcher=false;
       }
   };
   push();
@@ -468,22 +491,21 @@ else{
 
   pop();
 };
-var movY=0;
+var movY=-300;
 var movSwitcher=false;
 
 
 function completed() {
   push();
   var txtCompleted;
-  var timeCompleted='30 sec';
   if(movSwitcher==false) {
     if(movY<80){movY+=2};
     if(movY>=80){movY=80; movSwitcher=true;};
   }
     if(movSwitcher==true) {
       movY-=2;
-      if(movY<=0) {
-        movY=0;
+      if(movY<=-300) {
+        movY=-300;
         infoOn=true;
       };
     }
@@ -504,13 +526,6 @@ function completed() {
   text(txtCompleted,0+2,height/movY+2);
   fill(colorList[3]);
   text(txtCompleted,0,height/movY);
-  // push();
-  // textSize(12);
-  // fill(45,45,45,45);
-  // text('in '+timeCompleted,0+1,height/movY+31);
-  // fill(85,85,85);
-  // text('in '+timeCompleted,0,height/movY+30);
-  // pop();
   pop();
   pop();
 }
@@ -708,6 +723,7 @@ function radar() {
   climbOn=false;
   zoomButtons();
   radarQuadrant();
+  nButton();
   var locationTitle;
   var locationTxt;
   var signalTitle;
@@ -720,13 +736,13 @@ function radar() {
   noFill();
   strokeWeight(3);
   stroke(104,222,232,45);
-  ellipse(width/2.35-7,-height/2.2+57+1,2+accuracyCircle);
+  ellipse(width/2.35-7,-height/2.16+57+1,2+accuracyCircle);
   stroke(accuracyCircleCol);
-  ellipse(width/2.35-8,-height/2.2+57,2+accuracyCircle);
+  ellipse(width/2.35-8,-height/2.16+57,2+accuracyCircle);
   fill(79,86,106);
   noStroke();
-  textSize(12);
-  text(signalTitle,width/2.35-23,-height/2.2+60);
+  textSize(10);
+  text(signalTitle,width/2.35-23,-height/2.16+60);
   pop();
 
   fill(72,130,130);
@@ -794,6 +810,28 @@ function radar() {
       console.log('+: '+hit_zoomPlus);
       zoomIn();
     }
+    pop();
+  }
+
+  function nButton() {
+    var hit_nButton=false;
+    push();
+    fill(45,45,45,45);
+    ellipse(-width/2.3+1,height/2.3+1,30);
+    fill(colorList[1]);
+    ellipse(-width/2.3,height/2.3,30);
+    textAlign(CENTER);
+    fill(120,120,120);
+    if(nordIsUp==true) {fill(69,190,200);}
+    textFont(ubuntuBold);
+    textSize(12);
+    triangle(-width/2.3-3,height/2.33,-width/2.3+3,height/2.33,-width/2.3,height/2.33-5);
+    text("N",-width/2.3,height/2.22);
+    hit_nButton=collidePointCircle(mouseX-width/2,mouseY-height/2,-width/2.2,height/2.3,30);
+    if(hit_nButton==true) {
+      nordIsUp=!nordIsUp
+    }
+    console.log(nordIsUp);
     pop();
   }
 
