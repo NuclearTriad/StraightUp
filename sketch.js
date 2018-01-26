@@ -1129,7 +1129,7 @@ function showLocation(position) {
           if (isNaN(metriPrec)==false) {backUpPositionDist.push(metriPrec);} //se gli aggiornamenti hanno raggiunto la quota di 15. inizia ad aggiungere le distanze percorse alla Array di tutte le distanze
           metriTOT = backUpPositionDist.sum(); //fai la sommatoria della Array di tutte le distanze percorse per sapere la distanza totale percorsa
             
-          conv = map(metriTOT, 0, myData.landmarks_en[scelto].height, 0, 1000); //converte la distanza in m in pixel di scalata
+          conv = map(metriTOT, 0, myData.landmarks_en[scelto].height, 0, myData.landmarks_en[scelto].hPx); //converte la distanza in m in pixel di scalata
           //conv=100;
           
           
