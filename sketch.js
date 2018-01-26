@@ -169,13 +169,13 @@ function draw() {
 
   if(sequoiaDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
     check_scal=true;
-    scelto=7; 
+    scelto=7;
     climbMode(7,true,1.25,1.25,-700,200); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   };
 
   if(burjDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
     check_scal=true;
-    scelto=8; 
+    scelto=8;
     climbMode(8,true,15,2,-550,400); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   };
 
@@ -206,7 +206,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   text('accuracy: ' + accuracy, 5, 30 * 4);
   text('Aggiornamenti: ' + numeroAgg, 5, 30 * 5);
   text('Distanza Precedente: ' + metriPrec, 5, 30 * 6);
-  text('conv: ' + conv, 5, 30 * 7);  
+  text('conv: ' + conv, 5, 30 * 7);
   pop();
   // console.log('infoOn: '+infoOn);
   // console.log('infoButtonShow: '+infoButtonShow);
@@ -387,6 +387,8 @@ function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //stru
       if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
         setTimeout(infoScreen(structNum),400);
         if(infoButtonShow==true){infoButton()};
+        movY=0;
+        movSwitcher=false;
       }
   };
   push();
@@ -598,15 +600,21 @@ function instructions() {
     var topText="The human mind perceives distance and height in different ways.",
         questText="What happens if vertical becomes horizontal?",
         titleText="Instructions";
-        camminaText="Choose a landmark and begin to walk. Stop when you've completed the whole height.";
+        camminaText="Choose one of the landmarks and begin to walk. Stop when you've completed the whole height.";
         drittoText="Tip: walk straight for the best experience.";
+
+        if(stabilizzato==false) {stabileText="Stabilization in progress! Stand still for a moment..."}
+        else{stabileText=""};
   }
   if(ita==true) {
     var topText="La mente umana percepisce l'altezza e la distanza in modo differente",
         questText="Cosa succede se il verticale diventa orizzontale?",
         titleText="Istruzioni",
-        camminaText="Scegli un punto di riferimento e inizia a camminare. Fermati quando avrai completato l'intera altezza",
+        camminaText="Scegli uno dei punti di riferimento e inizia a camminare. Fermati quando avrai completato l'intera altezza",
         drittoText="Suggerimento: per un'esperienza migliore cammina in linea retta.";
+
+    if(stabilizzato==false) {stabileText="Stabilizzazione in corso! Resta fermo un attimo..."}
+    else{stabileText=""};
   }
 
   //icons
@@ -638,9 +646,19 @@ function instructions() {
   textFont(ubuntuMedium);
   text(camminaText,width/12,height/18,width-160,height/5);
   text(drittoText,width/12,height/18+110,width-160,height/5);
+
+  push();
+  textAlign(CENTER);
+  fill(70,100,210);
+  textSize(14);
+  textFont(ubuntuBold);
+  text(stabileText,0,height/2.15,width-155,height/5);
   pop();
 
+  pop();
+  if(stabilizzato==true) {
   instButtonStart();
+  }
 }
 
 function instButtonStart() {
@@ -675,6 +693,8 @@ function instButtonStart() {
   }
 
 function radar() {
+  var accuracyCircle=accuracy;
+  var accuracyCircleCol=colorList[1];
   backMenuOn=false;
   infoOn=false
   titleScreenOn = false;
@@ -684,8 +704,25 @@ function radar() {
   radarQuadrant();
   var locationTitle;
   var locationTxt;
-  if(eng==true) {locationTitle='location'; locationTxt='Milan';};
-  if(ita==true) {locationTitle='luogo'; locationTxt='Milano';};
+  var signalTitle;
+  if(eng==true) {locationTitle='location'; locationTxt='Milan'; signalTitle='signal accuracy'};
+  if(ita==true) {locationTitle='luogo'; locationTxt='Milano'; signalTitle='accuratezza segnale'};
+
+  push();
+  if(accuracy>12) {accuracyCircle=12}
+  if(accuracy<=4) {accuracyCircleCol='#ccfbff'}
+  noFill();
+  strokeWeight(3);
+  stroke(104,222,232,45);
+  ellipse(width/2.35-7,-height/2.2+57+1,2+accuracyCircle);
+  stroke(accuracyCircleCol);
+  ellipse(width/2.35-8,-height/2.2+57,2+accuracyCircle);
+  fill(79,86,106);
+  noStroke();
+  textSize(12);
+  text(signalTitle,width/2.35-23,-height/2.2+60);
+  pop();
+
   fill(72,130,130);
   textSize(12);
   textAlign(RIGHT);
@@ -700,8 +737,8 @@ function radar() {
   // infoPoint(50,10);
   pop();
   rot+=0.01;
-  pointerIcon(heading); //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
   drawIconOnRadar()
+  pointerIcon(heading); //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
 
   function zoomButtons() {
     push();
@@ -935,7 +972,7 @@ rectMode(CORNER);
 hit_yes = collidePointRect(mouseX-width/2,mouseY-height/2,-width/3.7,-height/11,width/4.7,height/10);
 if(hit_yes==true) {
   metriTOT=0;
-  
+
   backUpPositionDist=[];
   //mask.rect(0, 1280, 720, 1280);
   //( imgClone = imgLink[scelto].get() ).mask( mask.get() );
@@ -945,7 +982,7 @@ if(hit_yes==true) {
   //imgClone.clear();
   conv=0;
   check_scal=false;
-  
+
   if(sequoiaDemoOn==false && burjDemoOn==false) {
     setTimeout(function() {
     burjDemoOn=false;
@@ -969,7 +1006,7 @@ if(hit_yes==true) {
   demoTitlesOn=true;
 
   f=300;
-  
+
   hit_yes=false;
   },100);
   }
@@ -1122,20 +1159,20 @@ function showLocation(position) {
 
     stabilizzation() //Stabilizzazione
     if(climbOn==true){
-        
+
         console.log(conv);
        if ((stabilizzato==true)&&(metriTOT<myData.landmarks_en[scelto].height)&&(metriPrec>accuracyLimit)&&check_scal==true) {
 
           if (isNaN(metriPrec)==false) {backUpPositionDist.push(metriPrec);} //se gli aggiornamenti hanno raggiunto la quota di 15. inizia ad aggiungere le distanze percorse alla Array di tutte le distanze
           metriTOT = backUpPositionDist.sum(); //fai la sommatoria della Array di tutte le distanze percorse per sapere la distanza totale percorsa
-            
+
           conv = map(metriTOT, 0, myData.landmarks_en[scelto].height, 0, myData.landmarks_en[scelto].hPx); //converte la distanza in m in pixel di scalata
           //conv=100;
-          
-          
 
-          ( imgClone = imgLink[scelto].get() ).mask( mask.get() ); 
-           
+
+
+          ( imgClone = imgLink[scelto].get() ).mask( mask.get() );
+
            //imposta la maschera appena creata al immagine imgClone
 
 
