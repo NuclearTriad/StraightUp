@@ -381,9 +381,12 @@ function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //stru
     climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax);
     climbInterface(structNum);
     backArrow();
-    if(metriTOT>=heightLink[structNum] && completedAnim==true){
+    if(metriTOT>=heightLink[structNum]){
         check_scal=false;
-        completed();
+        completedAnim=true;
+        if (completedAnim==true) {
+          completed();
+        }
     }
       if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
         setTimeout(infoScreen(structNum),400);
