@@ -139,10 +139,20 @@ function setup() { //tutti i default dell'interfaccia
   }
 
 function draw() {
-
   if(mouseIsPressed==false) {mouseX=-100; mouseY=-100;}
 
   translate(width/2,height/2);
+
+  if(windowWidth>windowHeight){
+    background(colorList[0]);
+    textSize(16);
+    fill(25);
+    text("This site is intended to be viewed on a smartphone in portrait mode",0,height/2.7,width-210,height/3);
+    imageMode(CENTER);
+    scale(0.45);
+    image(SU_logo,0,-height/4.5);
+  }
+  else{
   background(colorList[0]);
   // instructions();
   // infoOn=true;
@@ -212,6 +222,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   pop();
   // console.log('infoOn: '+infoOn);
   // console.log('infoButtonShow: '+infoButtonShow);
+  }
 } //draw END
 
 function titleScreen() {
@@ -259,8 +270,12 @@ function titleScreen() {
   hit_cred = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.1,height/2.25,65,30);
   if(hit_cred==true) {
     push();
-    background(colorList[0]);
+    background(245);
     imageMode(CENTER);
+    push();
+    textAlign(CENTER);
+    text("We'll hack your location and then we'll nuke your home.",0,height/2.6,width-50,height/3);
+    pop();
     scale(0.7);
     image(nuclearTriad,0,-height/10);
     pop();
