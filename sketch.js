@@ -147,7 +147,7 @@ function draw() {
     background(colorList[0]);
     textSize(16);
     fill(25);
-    text("This site is intended to be viewed on a smartphone in portrait mode",0,height/2.7,width-210,height/3);
+    text("This site is intended to be viewed on a smartphone in portrait mode",0,height/2.4,width-210,height/3);
     imageMode(CENTER);
     scale(0.45);
     image(SU_logo,0,-height/4.5);
@@ -274,7 +274,7 @@ function titleScreen() {
     imageMode(CENTER);
     push();
     textAlign(CENTER);
-    text("We'll hack your location and then we'll nuke your home.",0,height/2.6,width-50,height/3);
+    text("We'll hack your location and then we'll nuke your home.",0,height/2.4,width-50,height/3);
     pop();
     scale(0.7);
     image(nuclearTriad,0,-height/10);
