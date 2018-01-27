@@ -826,7 +826,10 @@ function radar() {
     text("N",-width/2.3,height/2.22);
     hit_nButton=collidePointCircle(mouseX-width/2,mouseY-height/2,-width/2.2,height/2.3,30);
     if(hit_nButton==true) {
-      nordIsUp=!nordIsUp
+      // setTimeout(function(){
+        nordIsUp=!nordIsUp;
+        if(mouseIsPressed==true) {mouseX=-100; mouseY=-100;}
+      // },5);
     }
     console.log(nordIsUp);
     pop();
@@ -1020,7 +1023,6 @@ if(hit_yes==true) {
   movY=0;
   movSwitcher=false;
   infoOn=false;
-  infoOpen=false;
 
   backUpPositionDist=[];
   conv=0;
@@ -1035,7 +1037,6 @@ if(hit_yes==true) {
     titleScreenOn=false;
     demoTitlesOn=false;
     infoOn=false;
-    infoOpen=false;
     backMenu=false;
     radarOn=true;
 
