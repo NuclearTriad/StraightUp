@@ -259,7 +259,7 @@ function titleScreen() {
   hit_cred = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.1,height/2.25,65,30);
   if(hit_cred==true) {
     push();
-    background(255);
+    background(colorList[0]);
     imageMode(CENTER);
     scale(0.7);
     image(nuclearTriad,0,-height/10);
@@ -330,7 +330,7 @@ function demoTitles(){
   backArrow();
 
   textSize(52);
-  fill(45,45,45,45);
+  fill(89,210,220,150);
   text('demo',0+2,-height/3.2+2);
   fill(colorList[3]);
   text('demo',0,-height/3.2);
@@ -411,8 +411,6 @@ function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //stru
     backArrow();
     if(metriTOT>=heightLink[structNum]){
         check_scal=false;
-          movY=-300;
-          movSwitcher=false;
           completed();
     }
       if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
@@ -444,7 +442,6 @@ function climbInterface(structNum) {
 }
 var cloudSwitch=false;
 function climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) {
-
   push();
   imageMode(CENTER);
 
@@ -491,7 +488,7 @@ else{
 
   pop();
 };
-var movY=-300;
+var movY=0;
 var movSwitcher=false;
 
 
@@ -504,12 +501,12 @@ function completed() {
   }
     if(movSwitcher==true) {
       movY-=2;
-      if(movY<=-300) {
-        movY=-300;
+      if(movY<=0) {
+        movY=0;
         infoOn=true;
       };
     }
-  // console.log(movY);
+  console.log(movY);
   if(eng==true) {txtCompleted="completed!"}
   if(ita==true) {txtCompleted="completata!"}
   textSize(46);
@@ -1020,6 +1017,10 @@ rectMode(CORNER);
 hit_yes = collidePointRect(mouseX-width/2,mouseY-height/2,-width/3.7,-height/11,width/4.7,height/10);
 if(hit_yes==true) {
   metriTOT=0;
+  movY=0;
+  movSwitcher=false;
+  infoOn=false;
+  infoOpen=false;
 
   backUpPositionDist=[];
   conv=0;
