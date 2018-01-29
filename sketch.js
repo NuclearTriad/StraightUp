@@ -219,6 +219,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   text('Aggiornamenti: ' + numeroAgg, 5, 30 * 5);
   text('Distanza Precedente: ' + metriPrec, 5, 30 * 6);
   text('conv: ' + conv, 5, 30 * 7);
+  text('heading: ' + heading, 5, 30 * 8);
   pop();
   // console.log('infoOn: '+infoOn);
   // console.log('infoButtonShow: '+infoButtonShow);
@@ -1177,7 +1178,7 @@ function drawIconOnRadar() {
       posRelMe[i].dist = measure(myData.landmarks_en[i].Lat, myData.landmarks_en[i].Lon, myLat, myLon);
 
       var headingAng = 0;
-      if (nordIsUp == false) {headingAng = heading;}
+      if (nordIsUp == false) {headingAng = heading_tot;}
 
       if ((posRelMe[i].Lon>0)&&(posRelMe[i].Lat>0)) {posRelMe[i].Ang = (atan(posRelMe[i].distY/posRelMe[i].distX))+headingAng;}
       if ((posRelMe[i].Lon>0)&&(posRelMe[i].Lat<0)) {posRelMe[i].Ang = 180-(atan(posRelMe[i].distY/posRelMe[i].distX))+headingAng;}
@@ -1224,7 +1225,7 @@ function showLocation(position) {
     longitude = position.coords.longitude; //prendi la longitudine dell'utente
     accuracy = position.coords.accuracy; //prendi l'accuratezza della precisione dell'utente
     heading = position.coords.heading; //prendi la direzione rispetto al nord dell'utente
-    if(isNaN(heading)==false){
+    if(heading!=null){
         heading_tot=heading;
     }
     numeroAgg++
@@ -1239,6 +1240,9 @@ function showLocation(position) {
     
     if(stabilizzato==false){
         stabilizzation() //Stabilizzazione
+    }
+    if(climbOn==false && stabilizzato==true){
+        metriPrec=0;    
     }
     if(climbOn==true){
 
@@ -1266,6 +1270,7 @@ function showLocation(position) {
            ( imgClone = imgLink[scelto].get() ).mask( mask.get() );
            check_scal=false;
        }
+       
     }
   }
 
