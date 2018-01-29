@@ -1268,7 +1268,8 @@ function showLocation(position) {
            
            metriTOT=myData.landmarks_en[scelto].height;
            conv=myData.landmarks_en[scelto].hPx;
-           ( imgClone = imgLink[scelto].get() ).mask( mask.get() );
+           mask.rect(0, 1280-conv, 720, 1280);
+           (imgClone = imgLink[scelto].get() ).mask( mask.get() );
            //check_scal=false;
        }
        
