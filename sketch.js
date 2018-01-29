@@ -26,7 +26,7 @@ var myData, //segnaposto JSON
     myLat= 45.504996, //mia posizione Lat (Se si vuole mettere una fittizia, aggiungerla qui e disattivare getLocationUpdate() nel setup()) [Esempio: 45.504996]
     myLon=  9.166526, //mia posizione Lon (Se si vuole mettere una fittizia, aggiungerla qui e disattivare getLocationUpdate() nel setup()) [Esempio: 9.166526]
     heading, //mia direzione
-
+    heading_tot=0, //direzione salvata in caso di Nan
     posXPointer, //posizione centro radar
     posYPointer, //posizione centro radar
 
@@ -70,7 +70,7 @@ var latitude,
     stabilizzato = false, //inizia con la propriteà non stabilizzata
     backUpstabilizzation = [], //crea la array dei valori per stabilizzare
     stabilizzationTOT = 0,
-    accuracyLimit = 0.2, //valore in metri che deve avere la sommatoria della array precedente per essere considerata accettabile
+    accuracyLimit = 0.4, //valore in metri che deve avere la sommatoria della array precedente per essere considerata accettabile
     maxStabilizzationArray = 4, //massimo numero di valori che l'array di sopra può tenere (maggiore è più preciso è)
 
     conv=0, //conversione da m in pixel di scalata
@@ -193,7 +193,7 @@ function draw() {
 
   for (var i=0; i < myData.landmarks_en.length; i++){
       if(hit_struct[i]==true){
-          check_scal=true;
+          //check_scal=true;
           radarOn=false;
           console.log("cliccato "+i);
           push();
@@ -214,7 +214,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   textFont(ubuntuRegular);
   text('latitude: ' + latitude, 5, 30);
   text('longitude: ' + longitude, 5, 30 * 2);
-  text('stabile: ' + stabilizzato + "/" + climbOn, 5, 30 * 3);
+  text('stabile: ' + stabilizzato + "/" + climbOn + "/" + check_scal, 5, 30 * 3);
   text('accuracy: ' + accuracy, 5, 30 * 4);
   text('Aggiornamenti: ' + numeroAgg, 5, 30 * 5);
   text('Distanza Precedente: ' + metriPrec, 5, 30 * 6);
@@ -414,7 +414,7 @@ var f=300;
 function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   radarOn=false;
   climbOn=true;
-
+  check_scal=true;
 
 
   if(f>1800){f=1800} else{f+=50;}
@@ -425,8 +425,7 @@ function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //stru
     climbInterface(structNum);
     backArrow();
     if(metriTOT>=heightLink[structNum]){
-        check_scal=false;
-          completed();
+        completed();
     }
       if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
         setTimeout(infoScreen(structNum),400);
@@ -772,11 +771,11 @@ function radar() {
   pop();
   rot+=0.01;
 
-  if (nordIsUp==true) {pointerIcon(heading);}  //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
+  if (nordIsUp==true) {pointerIcon(heading_tot);}  //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
   else {pointerIcon(0);};
 
   drawIconOnRadar()
-  pointerIcon(heading); //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
+  pointerIcon(heading_tot); //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
 
   function zoomButtons() {
     push();
@@ -1036,6 +1035,7 @@ hit_yes = collidePointRect(mouseX-width/2,mouseY-height/2,-width/3.7,-height/11,
 if(hit_yes==true) {
   metriTOT=0;
   movY=0;
+  metriPrec=0;
   movSwitcher=false;
   infoOn=false;
 
@@ -1224,17 +1224,22 @@ function showLocation(position) {
     longitude = position.coords.longitude; //prendi la longitudine dell'utente
     accuracy = position.coords.accuracy; //prendi l'accuratezza della precisione dell'utente
     heading = position.coords.heading; //prendi la direzione rispetto al nord dell'utente
-
+    if(isNaN(heading)==false){
+        heading_tot=heading;
+    }
     numeroAgg++
 
     backUpPositionLat.push(latitude); //aggiungi la latitudine alla Array di backup delle latitudini
     backUpPositionLon.push(longitude); //aggiungi la longitudine alla Array di backup delle longitudini
-
-    metriPrec = measure(backUpPositionLat[numeroAgg],backUpPositionLon[numeroAgg],backUpPositionLat[numeroAgg-1],backUpPositionLon[numeroAgg-1]) //calcola la distanza tra la posizione precedente è quella attuale
-    metriPrec = Math.round(metriPrec*100)/100 //arrotonda la distanza precedente
-
-    stabilizzation() //Stabilizzazione
-
+    
+    if(stabilizzato==false || climbOn==true){
+        metriPrec = measure(backUpPositionLat[numeroAgg],backUpPositionLon[numeroAgg],backUpPositionLat[numeroAgg-1],backUpPositionLon[numeroAgg-1]) //calcola la distanza tra la posizione precedente è quella attuale
+        metriPrec = Math.round(metriPrec*100)/100 //arrotonda la distanza precedente
+    }
+    
+    if(stabilizzato==false){
+        stabilizzation() //Stabilizzazione
+    }
     if(climbOn==true){
 
         console.log(conv);
@@ -1254,10 +1259,12 @@ function showLocation(position) {
 
 
        }
-       if(metriTOT>=myData.landmarks_en[scelto].height){
+       if(metriTOT>=myData.landmarks_en[scelto].height && check_scal==true){
+           
            metriTOT=myData.landmarks_en[scelto].height;
            conv=myData.landmarks_en[scelto].hPx;
            ( imgClone = imgLink[scelto].get() ).mask( mask.get() );
+           check_scal=false;
        }
     }
   }
