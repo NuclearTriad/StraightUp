@@ -180,13 +180,13 @@ function draw() {
   };
 
   if(sequoiaDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
-    check_scal=true;
+    //check_scal=true;
     scelto=7;
     climbMode(7,true,1.25,1.25,-700,200); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   };
 
   if(burjDemoOn==true) { //avvia la modalità scalata (climbOn viene impostato come true solo dopo la pressione del pulsante della squoia, per ora)
-    check_scal=true;
+    //check_scal=true;
     scelto=8;
     climbMode(8,true,15,2,-550,400); //structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax
   };
@@ -425,7 +425,7 @@ function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //stru
     climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax);
     climbInterface(structNum);
     backArrow();
-    if(metriTOT>=heightLink[structNum]){
+    if(metriTOT==heightLink[structNum]){
         completed();
     }
       if(infoOn==true) { //se true fa comparire la schermata con le informazioni sulla struttura
@@ -510,6 +510,7 @@ var movSwitcher=false;
 function completed() {
   push();
   var txtCompleted;
+  check_scal=false;
   if(movSwitcher==false) {
     if(movY<80){movY+=2};
     if(movY>=80){movY=80; movSwitcher=true;};
@@ -1263,12 +1264,12 @@ function showLocation(position) {
 
 
        }
-       if(metriTOT>=myData.landmarks_en[scelto].height && check_scal==true){
+       if(metriTOT>=myData.landmarks_en[scelto].height && check_scal==true && (metriPrec>accuracyLimit)){
            
            metriTOT=myData.landmarks_en[scelto].height;
            conv=myData.landmarks_en[scelto].hPx;
            ( imgClone = imgLink[scelto].get() ).mask( mask.get() );
-           check_scal=false;
+           //check_scal=false;
        }
        
     }
