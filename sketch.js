@@ -718,12 +718,13 @@ function instButtonStart() {
   // rect(-62,height/2.9,123,40);
   hit_instStart=collidePointRect(mouseX-width/2,mouseY-height/2,-62,height/2.9,123,40);
   if(hit_instStart==true) {
+    calcPosRelMe();
     instOn=false;
     hit_instStart=false;
   }
   pop();
   }
-
+var headingMode=heading_tot;
 function radar() {
   var accuracyCircle=accuracy;
   var accuracyCircleCol=colorList[1];
@@ -771,11 +772,11 @@ function radar() {
   pop();
   rot+=0.01;
 
-  if (nordIsUp==true) {pointerIcon(heading_tot);}  //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
-  else {pointerIcon(0);};
+  if (nordIsUp==true) {headingMode=heading_tot;}  //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
+  else {headingMode=0;};
 
   drawIconOnRadar()
-  pointerIcon(heading_tot); //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
+  pointerIcon(headingMode); //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
 
   function zoomButtons() {
     push();
@@ -840,11 +841,8 @@ function radar() {
     text("N",-width/2.3,height/2.22);
     hit_nButton=collidePointCircle(mouseX-width/2,mouseY-height/2,-width/2.2,height/2.3,30);
     if(hit_nButton==true) {
-      // setTimeout(function(){
         nordIsUp=!nordIsUp;
-        calcPosRelMe();
         if(mouseIsPressed==true) {mouseX=-100; mouseY=-100;}
-      // },5);
     }
     console.log(nordIsUp);
     pop();
