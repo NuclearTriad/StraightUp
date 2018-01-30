@@ -23,8 +23,8 @@ var scelto=-1;//id globale dell'edificio scelto
 var myData, //segnaposto JSON
 
     posRelMe = [], //Oggetto Posizioni oggetti rispetto alla mia posizione
-    myLat= 45.504996, //mia posizione Lat (Se si vuole mettere una fittizia, aggiungerla qui e disattivare getLocationUpdate() nel setup()) [Esempio: 45.504996]
-    myLon=  9.166526, //mia posizione Lon (Se si vuole mettere una fittizia, aggiungerla qui e disattivare getLocationUpdate() nel setup()) [Esempio: 9.166526]
+    myLat, //mia posizione Lat (Se si vuole mettere una fittizia, aggiungerla qui e disattivare getLocationUpdate() nel setup()) [Esempio: 45.504996]
+    myLon, //mia posizione Lon (Se si vuole mettere una fittizia, aggiungerla qui e disattivare getLocationUpdate() nel setup()) [Esempio: 9.166526]
     heading, //mia direzione
     heading_tot=0, //direzione salvata in caso di Nan
     posXPointer, //posizione centro radar
@@ -33,9 +33,9 @@ var myData, //segnaposto JSON
     zoom = 13564; //var zoom inizilae
     limSupZoom = 1364;
     limInfZoom = 131072;
-    zoomIncrement = 1.02;
+    zoomIncrement = 1.04;
 
-    distCliccable = 50; //distanza dalla cui si può selezionare (in metri)
+    distCliccable = 120; //distanza dalla cui si può selezionare (in metri)
 
     nordIsUp = true;
 
@@ -54,9 +54,7 @@ var myData, //segnaposto JSON
 
     //variabili scalata+geolocalizzazione
 
-var latitude,
-    longitude,
-    accuracy,
+var accuracy,
 
     numeroAgg = -1,
     metriTOT = 0,
@@ -192,7 +190,7 @@ function draw() {
   };
 
   for (var i=0; i < myData.landmarks_en.length; i++){
-      if(hit_struct[i]==true){
+      if((hit_struct[i]==true)&&(posRelMe[i].dist<=distCliccable)){
           //check_scal=true;
           radarOn=false;
           console.log("cliccato "+i);
@@ -212,8 +210,8 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   textAlign(LEFT);
   textSize(12);
   textFont(ubuntuRegular);
-  text('latitude: ' + latitude, 5, 30);
-  text('longitude: ' + longitude, 5, 30 * 2);
+  text('latitude: ' + myLat, 5, 30);
+  text('longitude: ' + myLon, 5, 30 * 2);
   text('stabile: ' + stabilizzato + "/" + climbOn + "/" + check_scal, 5, 30 * 3);
   text('accuracy: ' + accuracy, 5, 30 * 4);
   text('Aggiornamenti: ' + numeroAgg, 5, 30 * 5);
@@ -844,6 +842,7 @@ function radar() {
     if(hit_nButton==true) {
       // setTimeout(function(){
         nordIsUp=!nordIsUp;
+        calcPosRelMe();
         if(mouseIsPressed==true) {mouseX=-100; mouseY=-100;}
       // },5);
     }
@@ -870,6 +869,9 @@ function radar() {
     if(radarOn==true) {radarQuadrantSwitch=true;}
     if (radarQuadrantSwitch==true) {r-=23}
     if (r<=0) {r=0};
+
+    zoomCircle = map (zoom,limSupZoom,limInfZoom,1,0.2)
+
   noStroke();
   fill(45,45,45,45);
   fill(45,45,45,45);
@@ -1098,10 +1100,10 @@ function drawIconOnRadar() {
     translate(posXPointer,posYPointer)
     for (var i=0; i < myData.landmarks_en.length; i++) { //Disegna tutte le icone
 
-      var wImg = 40,
-          hImg = 80,
-          wElli = 65,
-          hElli = 15,
+      var wImg,
+          hImg,
+          wElli,
+          hEll,
 
           distCoord = dist(0,0, posRelMe[i].Lon, posRelMe[i].Lat)
 
@@ -1110,6 +1112,18 @@ function drawIconOnRadar() {
           xIn = (distCoord*zoom)*cos(posRelMe[i].Ang-90),
           yIn = (distCoord*zoom)*sin(posRelMe[i].Ang-90)-(hImg/2);
 
+          if(dist(0,0,(posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1))<(circle/2)) {
+            wImg = map(zoom,limSupZoom,limInfZoom,15,50);
+            hImg = map(zoom,limSupZoom,limInfZoom,30,90);
+            wElli = map(zoom,limSupZoom,limInfZoom,28,75);
+            hElli = map(zoom,limSupZoom,limInfZoom,5,25);
+          }
+          else {
+            wImg = map(zoom,limSupZoom,limInfZoom,15,50);
+            hImg = map(zoom,limSupZoom,limInfZoom,30,90);
+            wElli = map(zoom,limSupZoom,limInfZoom,28,75);
+            hElli = map(zoom,limSupZoom,limInfZoom,5,25);
+          }
 
       hit_struct[i] = false;
 
@@ -1145,12 +1159,25 @@ function drawIconOnRadar() {
         } //Se l'icona è stat visitata
     }
     push();
-    // noFill();
-    // // stroke(45,45,45);
-    // // strokeWeight(2);
-    // // rectMode(CENTER);
-    // rect( (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80 );
-    hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-height/2,(posRelMe[i].Lon)*zoom-20,(posRelMe[i].Lat)*zoom*(-1)-17,40,80)
+    noFill();
+    stroke(45,45,45);
+    strokeWeight(2);
+    rectMode(CENTER);
+
+
+    // questo è il mio codice:
+
+    //praticamente il la hitbox sembra sempre spostata verso l'alto di un valore fisso, se lo zoom è al massimo sembra che sia sposta verso l'altro di poco, se invece lo zoom è al minimo la hitbox è completamente spostato verso l'alto sopra l'icona, sembra sempre dello stesso valore.
+    //forse ha a che fare con il mouseX-width/2,mouseY-height/2...
+
+    rect(xIn,yIn,wImg,hImg);
+    hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-(height/2),xIn-(wImg/2),yIn,wImg,hImg)
+
+    //questo è il codice originale:
+
+    //rect( (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80 );
+    //hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-height/2,(posRelMe[i].Lon)*zoom-20,(posRelMe[i].Lat)*zoom*(-1)-17,40,80)
+
     // if(hit_struct[i]==true){
     //
     //   push();
@@ -1222,28 +1249,30 @@ function stabilizzation() {
 // Funzioni per chiamare getLocationUpdate() (funziona anche senza chiamere )
 
 function showLocation(position) {
-    latitude = position.coords.latitude; //prendi la latitudine dell'utente
-    longitude = position.coords.longitude; //prendi la longitudine dell'utente
+    myLat = position.coords.latitude; //prendi la latitudine dell'utente
+    myLon= position.coords.longitude; //prendi la longitudine dell'utente
     accuracy = position.coords.accuracy; //prendi l'accuratezza della precisione dell'utente
     heading = position.coords.heading; //prendi la direzione rispetto al nord dell'utente
+
+
     if(heading!=null){
         heading_tot=heading;
     }
     numeroAgg++
 
-    backUpPositionLat.push(latitude); //aggiungi la latitudine alla Array di backup delle latitudini
-    backUpPositionLon.push(longitude); //aggiungi la longitudine alla Array di backup delle longitudini
-    
+    backUpPositionLat.push(myLat); //aggiungi la latitudine alla Array di backup delle latitudini
+    backUpPositionLon.push(myLon); //aggiungi la longitudine alla Array di backup delle longitudini
+
     if(stabilizzato==false || climbOn==true){
         metriPrec = measure(backUpPositionLat[numeroAgg],backUpPositionLon[numeroAgg],backUpPositionLat[numeroAgg-1],backUpPositionLon[numeroAgg-1]) //calcola la distanza tra la posizione precedente è quella attuale
         metriPrec = Math.round(metriPrec*100)/100 //arrotonda la distanza precedente
     }
-    
+
     if(stabilizzato==false){
         stabilizzation() //Stabilizzazione
     }
     if(climbOn==false && stabilizzato==true){
-        metriPrec=0;    
+        metriPrec=0;
     }
     if(climbOn==true){
 
@@ -1265,14 +1294,14 @@ function showLocation(position) {
 
        }
        if(metriTOT>=myData.landmarks_en[scelto].height && check_scal==true && (metriPrec>accuracyLimit)){
-           
+
            metriTOT=myData.landmarks_en[scelto].height;
            conv=myData.landmarks_en[scelto].hPx;
            mask.rect(0, 1280-conv, 720, 1280);
            (imgClone = imgLink[scelto].get() ).mask( mask.get() );
            //check_scal=false;
        }
-       
+
     }
   }
 
