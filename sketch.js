@@ -220,6 +220,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   text('Distanza Precedente: ' + metriPrec, 5, 30 * 6);
   text('conv: ' + conv, 5, 30 * 7);
   text('heading: ' + heading, 5, 30 * 8);
+  text('versione 21:33 31/01/18', 5, 30 * 9);
   pop();
   // console.log('infoOn: '+infoOn);
   // console.log('infoButtonShow: '+infoButtonShow);
@@ -454,7 +455,7 @@ function climbInterface(structNum) {
   fill(colorList[5]);
   text(Math.round(metriTOT*10)/10+'/'+myData.landmarks_en[scelto].height+'m',0,0);
   if(head_scal!=null){ //controllo heading scalata
-      if(head_scal>heading_tot+8 || head_scal<heading_tot-8){
+      if(head_scal>heading_tot+(accuracy*2) || head_scal<heading_tot-(accuracy*2)){
           textSize(12);
           if(ita==true){
             text("Per una migliore esperienza è consigliato camminare in linea retta!",0,60,width/1.3,100);
