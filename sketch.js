@@ -19,6 +19,8 @@ var demoTitlesOn=false;
 
 var check_scal=false; //la scalata è iniziata, si può iniziare il conteggio dei metri
 var scelto=-1;//id globale dell'edificio scelto
+var head_scal=null; //heading durante la scalata
+var conta_head=0; // assestamento heading scalata
 
 var myData, //segnaposto JSON
 
@@ -451,6 +453,17 @@ function climbInterface(structNum) {
   textSize(40);
   fill(colorList[5]);
   text(Math.round(metriTOT*10)/10+'/'+myData.landmarks_en[scelto].height+'m',0,0);
+  if(head_scal!=null){ //controllo heading scalata
+      if(head_scal>heading_tot+8 || head_scal<heading_tot-8){
+          textSize(12);
+          if(ita==true){
+            text("Per una migliore esperienza è consigliato camminare in linea retta!",0,60,width/1.3,100);
+          }
+          if(eng==true){
+            text("For a better experince in suggested to walk straight!",0,60,width/1.3,100);
+          }
+      }
+  }
   pop();
 }
 var cloudSwitch=false;
@@ -1160,17 +1173,18 @@ function drawIconOnRadar() {
     noFill();
     stroke(45,45,45);
     strokeWeight(2);
-    rectMode(CENTER);
+    //rectMode(CENTER);
 
 
     // questo è il mio codice:
 
     //praticamente il la hitbox sembra sempre spostata verso l'alto di un valore fisso, se lo zoom è al massimo sembra che sia sposta verso l'altro di poco, se invece lo zoom è al minimo la hitbox è completamente spostato verso l'alto sopra l'icona, sembra sempre dello stesso valore.
     //forse ha a che fare con il mouseX-width/2,mouseY-height/2...
-
+    push();
+    //translate(-posXPointer,-posYPointer)
     rect(xIn,yIn,wImg,hImg);
-    hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-(height/2),xIn-(wImg/2),yIn,wImg,hImg)
-
+    hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-height/2,xIn-wImg/2,yIn+posYPointer/2,wImg,hImg)
+    pop();
     //questo è il codice originale:
 
     //rect( (posRelMe[i].Lon)*zoom,(posRelMe[i].Lat)*zoom*(-1)-35,40,80 );
@@ -1265,18 +1279,26 @@ function showLocation(position) {
         metriPrec = measure(backUpPositionLat[numeroAgg],backUpPositionLon[numeroAgg],backUpPositionLat[numeroAgg-1],backUpPositionLon[numeroAgg-1]) //calcola la distanza tra la posizione precedente è quella attuale
         metriPrec = Math.round(metriPrec*100)/100 //arrotonda la distanza precedente
     }
-
+    if(stabilizzato==true && radarOn==true){
+        calcPosRelMe();
+    }
     if(stabilizzato==false){
         stabilizzation() //Stabilizzazione
     }
     if(climbOn==false && stabilizzato==true){
         metriPrec=0;
+        head_scal=null;
+        conta_head=0;
     }
     if(climbOn==true){
 
         console.log(conv);
        if ((stabilizzato==true)&&(metriTOT<myData.landmarks_en[scelto].height)&&(metriPrec>accuracyLimit)&&check_scal==true) {
-
+          if((head_scal==null && heading!=null) || (conta_head<10 && heading!=null)){
+             head_scal=heading;
+             heading_tot=head_scal;
+             conta_head++;
+          }
           if (isNaN(metriPrec)==false) {backUpPositionDist.push(metriPrec);} //se gli aggiornamenti hanno raggiunto la quota di 15. inizia ad aggiungere le distanze percorse alla Array di tutte le distanze
           metriTOT = backUpPositionDist.sum(); //fai la sommatoria della Array di tutte le distanze percorse per sapere la distanza totale percorsa
 
@@ -1292,7 +1314,7 @@ function showLocation(position) {
 
        }
        if(metriTOT>=myData.landmarks_en[scelto].height && check_scal==true && (metriPrec>accuracyLimit)){
-
+           conta_head=0;
            metriTOT=myData.landmarks_en[scelto].height;
            conv=myData.landmarks_en[scelto].hPx;
            mask.rect(0, 1280-conv, 720, 1280);
