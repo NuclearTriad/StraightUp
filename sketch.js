@@ -34,7 +34,7 @@ var myData, //segnaposto JSON
 
     zoom = 13564; //var zoom inizilae
     limSupZoom = 1364;
-    limInfZoom = 131072;
+    limInfZoom = 91072;
     zoomIncrement = 1.04;
 
     distCliccable = 120; //distanza dalla cui si può selezionare (in metri)
@@ -438,7 +438,7 @@ function climbMode(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) { //stru
   fill(colorList[0]);
   noStroke();
 
-  rect(width,height-f,-width*2,800);
+  //rect(width,height-f,-width*2,800);
   pop();
 
 
@@ -1105,7 +1105,7 @@ function drawIconOnRadar() {
       posXPointer = 0;
       posYPointer = height/11,
 
-  push()
+  push();
 
     imageMode(CENTER)
     translate(posXPointer,posYPointer)
@@ -1183,7 +1183,7 @@ function drawIconOnRadar() {
     push();
     //translate(-posXPointer,-posYPointer)
     rect(xIn,yIn,wImg,hImg);
-    hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-height/2,xIn-wImg/2,yIn+posYPointer/2,wImg,hImg)
+    hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-height/2,xIn-wImg/2,yIn+height/13,wImg,hImg)
     pop();
     //questo è il codice originale:
 
