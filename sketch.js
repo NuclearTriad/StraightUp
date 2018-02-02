@@ -107,9 +107,10 @@ function preload() { //tutti i preload delle immagini e i font
 
 function setup() { //tutti i default dell'interfaccia
   imgClone  = createGraphics(720, 1280);
-  mask = createGraphics(720, 1280); //crea il segnaposto per la mascherma sotto (le grandezze qui si ripetono poi sotto)
+  
 
   createCanvas(innerWidth,innerHeight);
+  mask = createGraphics(width,height); //crea il segnaposto per la mascherma sotto (le grandezze qui si ripetono poi sotto)
   rectMode(CENTER);
   textAlign(CENTER);
   angleMode(DEGREES);
@@ -220,7 +221,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   text('Distanza Precedente: ' + metriPrec, 5, 30 * 6);
   text('conv: ' + conv, 5, 30 * 7);
   text('heading: ' + heading, 5, 30 * 8);
-  text('versione 21:33 31/01/18', 5, 30 * 9);
+  text('versione 13:10 2/02/18', 5, 30 * 9);
   pop();
   // console.log('infoOn: '+infoOn);
   // console.log('infoButtonShow: '+infoButtonShow);
@@ -449,19 +450,20 @@ function climbInterface(structNum) {
 
   textAlign(CENTER);
   push();
-  translate(0,-height/2.6);
+  translate(0,-height/2);
+  //translate(0,-height/2.6);
   textFont(ubuntuBoldItalic);
   textSize(40);
   fill(colorList[5]);
-  text(Math.round(metriTOT*10)/10+'/'+myData.landmarks_en[scelto].height+'m',0,0);
+  text(Math.round(metriTOT*10)/10+'/'+myData.landmarks_en[scelto].height+'m',0,height/10,width,50);
   if(head_scal!=null){ //controllo heading scalata
-      if(head_scal>heading_tot+(accuracy*2) || head_scal<heading_tot-(accuracy*2)){
+      if(head_scal>heading_tot+(accuracy*3) || head_scal<heading_tot-(accuracy*3)){
           textSize(12);
           if(ita==true){
-            text("Per una migliore esperienza è consigliato camminare in linea retta!",0,60,width/1.3,100);
+            text("Per una migliore esperienza è consigliato camminare in linea retta!",0,(height/7)+50,width/1.3,100);
           }
           if(eng==true){
-            text("For a better experince in suggested to walk straight!",0,60,width/1.3,100);
+            text("For a better experince in suggested to walk straight!",0,(height/7)+50,width/1.3,100);
           }
       }
   }
@@ -470,7 +472,8 @@ function climbInterface(structNum) {
 var cloudSwitch=false;
 function climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) {
   push();
-  imageMode(CENTER);
+  translate(-width/2,-height/2);
+  imageMode(CORNER);
 
   cloudSwitch=cloudBool;
 
@@ -484,33 +487,21 @@ function climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) {
   pop();
   }
 
-  background
+  //background
   push();
-  if(innerHeight<=512) {
-  translate(0,-height/8.3);
-}
-else{
-  translate(0,-height/40);
-}
-  scale(width/720);
 
-  image(imgLinkBack[structNum],0,0);
+  image(imgLinkBack[structNum],0,height-(width*(1280/720)),width,width*(1280/720));
   pop();
 
   //structure
   push();
-  if(innerHeight<=512) {
-    scale(width/1000);
-  }
-
-else{
-  scale(width/850);
-}
-  translate(0,height/6);
-  mask.rect(0, 1280-conv, 720, 1280); //crea maschera da rettangolo
-  //( imgClone = imgLink[structNum].get() ).mask( mask.get() );
-  image(imgClone, 0,-height/40);
-  //image(imgLink[structNum],0,-height/40);
+  rectMode(CORNER);
+  //mask.rect(((width-((height-height/11)/(1280/720)))/2), (height-height/11), ((height-height/11)/(1280/720)), (height-height/11)-conv);
+  mask.rect(0,height-Math.round(map(conv,0,(height-height/10),0,height)),width,Math.round(map(conv,0,(height-height/10),0,height)));//crea maschera da rettangolo
+  //mask.rect(0,height-conv,width,conv);//crea maschera da rettangolo
+  image(imgClone, (width-((height-height/10)/(1280/720)))/2,height/10,(height-height/10)/(1280/720),(height-height/10));
+  
+  rectMode(CENTER);
   pop();
 
   pop();
@@ -1099,7 +1090,10 @@ pop();
 pop();
 }
 
-function windowResized() {resizeCanvas(innerWidth,innerHeight)} //ridimensionatore della schermata
+function windowResized() {
+    resizeCanvas(innerWidth,innerHeight);
+    mask = createGraphics(width,height);
+} //ridimensionatore della schermata
 
 function drawIconOnRadar() {
   var circle = (70+width/1-r),
@@ -1303,8 +1297,7 @@ function showLocation(position) {
           if (isNaN(metriPrec)==false) {backUpPositionDist.push(metriPrec);} //se gli aggiornamenti hanno raggiunto la quota di 15. inizia ad aggiungere le distanze percorse alla Array di tutte le distanze
           metriTOT = backUpPositionDist.sum(); //fai la sommatoria della Array di tutte le distanze percorse per sapere la distanza totale percorsa
 
-          conv = map(metriTOT, 0, myData.landmarks_en[scelto].height, 0, myData.landmarks_en[scelto].hPx); //converte la distanza in m in pixel di scalata
-          //conv=100;
+          conv = map(metriTOT, 0, myData.landmarks_en[scelto].height, 0, map(myData.landmarks_en[scelto].hPx,0,1280,0,height-height/12)); //converte la distanza in m in pixel di scalata
 
 
 
@@ -1317,9 +1310,13 @@ function showLocation(position) {
        if(metriTOT>=myData.landmarks_en[scelto].height && check_scal==true && (metriPrec>accuracyLimit)){
            conta_head=0;
            metriTOT=myData.landmarks_en[scelto].height;
-           conv=myData.landmarks_en[scelto].hPx;
-           mask.rect(0, 1280-conv, 720, 1280);
+           console.log(height-height/10);
+           conv=map(myData.landmarks_en[scelto].hPx,0,1280,0,height-height/10);
+           rectMode(CORNER);
+           //mask.rect((width-((height-height/11)/(1280/720)))/2,height/11,(height-height/11)/(1280/720),(height-height/11));
+           mask.rect(0,height-Math.round(map(conv,0,(height-height/10),0,height)),width,Math.round(map(conv,0,(height-height/10),0,height)));
            (imgClone = imgLink[scelto].get() ).mask( mask.get() );
+           rectMode(CENTER);
            //check_scal=false;
        }
 
