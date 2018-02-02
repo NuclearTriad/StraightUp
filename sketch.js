@@ -107,7 +107,7 @@ function preload() { //tutti i preload delle immagini e i font
 
 function setup() { //tutti i default dell'interfaccia
   imgClone  = createGraphics(720, 1280);
-  
+
 
   createCanvas(innerWidth,innerHeight);
   mask = createGraphics(width,height); //crea il segnaposto per la mascherma sotto (le grandezze qui si ripetono poi sotto)
@@ -500,7 +500,7 @@ function climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) {
   mask.rect(0,height-Math.round(map(conv,0,(height-height/10),0,height)),width,Math.round(map(conv,0,(height-height/10),0,height)));//crea maschera da rettangolo
   //mask.rect(0,height-conv,width,conv);//crea maschera da rettangolo
   image(imgClone, (width-((height-height/10)/(1280/720)))/2,height/10,(height-height/10)/(1280/720),(height-height/10));
-  
+
   rectMode(CENTER);
   pop();
 
@@ -738,8 +738,8 @@ function radar() {
   titleScreenOn = false;
   demoTitlesOn==false;
   climbOn=false;
-  zoomButtons();
   radarQuadrant();
+
   nButton();
   var locationTitle;
   var locationTxt;
@@ -781,6 +781,7 @@ function radar() {
   else {headingMode=0;};
 
   drawIconOnRadar()
+  zoomButtons();
   pointerIcon(headingMode); //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
 
   function zoomButtons() {
@@ -847,6 +848,7 @@ function radar() {
     hit_nButton=collidePointCircle(mouseX-width/2,mouseY-height/2,-width/2.2,height/2.3,30);
     if(hit_nButton==true) {
         nordIsUp=!nordIsUp;
+        calcPosRelMe();
         if(mouseIsPressed==true) {mouseX=-100; mouseY=-100;}
     }
     console.log(nordIsUp);
