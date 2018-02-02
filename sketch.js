@@ -154,9 +154,9 @@ function draw() {
   }
   else{
   background(colorList[0]);
+  // climbMode(7,true,1.25,1.25,-700,200);
   // instructions();
   // infoOn=true;
-  // climbMode(sequoia_bg,sequoia,50,true,2,1.25,-700,200);
   // demoTitles();
   // radar();
   // titleScreenOn=false;
@@ -268,8 +268,8 @@ function titleScreen() {
   // stroke(255);
   // strokeWeight(1);
   // rectMode(CORNER);
-  // rect(-width/2.1,height/2.25,65,30);
-  hit_cred = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.1,height/2.25,65,30);
+  // rect(-width/2.1,height/2.35,65,35);
+  hit_cred = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.1,height/2.35,65,35);
   if(hit_cred==true) {
     push();
     background(245);
@@ -455,7 +455,7 @@ function climbInterface(structNum) {
   fill(colorList[5]);
   text(Math.round(metriTOT*10)/10+'/'+myData.landmarks_en[scelto].height+'m',0,0);
   if(head_scal!=null){ //controllo heading scalata
-      if(head_scal>heading_tot+(accuracy*2) || head_scal<heading_tot-(accuracy*2)){
+      if(head_scal>heading_tot+(accuracy*3) || head_scal<heading_tot-(accuracy*3)){
           textSize(12);
           if(ita==true){
             text("Per una migliore esperienza è consigliato camminare in linea retta!",0,60,width/1.3,100);
@@ -484,32 +484,35 @@ function climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) {
   pop();
   }
 
-  background
+  // background
   push();
-  if(innerHeight<=512) {
-  translate(0,-height/8.3);
-}
-else{
-  translate(0,-height/40);
-}
-  scale(width/720);
-
-  image(imgLinkBack[structNum],0,0);
+  // if(innerHeight<=512) {
+//   // translate(0,-height/8.3);
+// }
+// else{
+  // translate(0,-height/40);
+// }
+  scale(0.5);
+  imageMode(CORNERS);
+  image(imgLinkBack[structNum],-width,-width*(1280/720),width,height);
+  // image(imgLink[7],(-height/1.1)/(1280/720),-height/1.1,width-width/5,height);
   pop();
 
   //structure
   push();
-  if(innerHeight<=512) {
-    scale(width/1000);
-  }
-
-else{
-  scale(width/850);
-}
-  translate(0,height/6);
+//   if(innerHeight<=512) {
+//     scale(width/1000);
+//   }
+//
+// else{
+//   scale(width/850);
+// }
+  // translate(0,height/6);
+  scale(0.5);
   mask.rect(0, 1280-conv, 720, 1280); //crea maschera da rettangolo
   //( imgClone = imgLink[structNum].get() ).mask( mask.get() );
-  image(imgClone, 0,-height/40);
+  imageMode(CORNERS);
+  image(imgClone,(-height/1.1)/(1280/720),-height/1.1,width-width/5,height);
   //image(imgLink[structNum],0,-height/40);
   pop();
 
@@ -1318,7 +1321,8 @@ function showLocation(position) {
            conta_head=0;
            metriTOT=myData.landmarks_en[scelto].height;
            conv=myData.landmarks_en[scelto].hPx;
-           mask.rect(0, 1280-conv, 720, 1280);
+           mask.rect(0,height-height/1.1-conv,width-width/5,height-height/1.1);
+           // mask.rect(0, 1280-conv, 720, 1280);
            (imgClone = imgLink[scelto].get() ).mask( mask.get() );
            //check_scal=false;
        }
