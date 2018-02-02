@@ -90,7 +90,6 @@ function preload() { //tutti i preload delle immagini e i font
   ubuntuRegularItalic=loadFont('./fonts/Ubuntu-RI.ttf');
   flag_en = loadImage('./assets/lang_en.png');
   flag_it = loadImage('./assets/lang_it.png');
-  pointer = loadImage('./assets/pointer.png');
   sequoia_button = loadImage('./assets/sequoia_button.png');
   burijKalifa_button = loadImage('./assets/burijKalifa_button.png');
   cloud = loadImage('./assets/cloud.png');
@@ -157,7 +156,9 @@ function draw() {
   background(colorList[0]);
   // instructions();
   // infoOn=true;
-  // climbMode(sequoia_bg,sequoia,50,true,2,1.25,-700,200);
+  // infoOpen=true;
+  // infoButtonShow=true;
+  // climbMode(7,true,1.25,1.25,-700,200);
   // demoTitles();
   // radar();
   // titleScreenOn=false;
@@ -270,7 +271,7 @@ function titleScreen() {
   // strokeWeight(1);
   // rectMode(CORNER);
   // rect(-width/2.1,height/2.25,65,30);
-  hit_cred = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.1,height/2.25,65,30);
+  hit_cred = collidePointRect(mouseX-width/2,mouseY-height/2,-width/2.1,height/2.35,65,35);
   if(hit_cred==true) {
     push();
     background(245);
@@ -355,32 +356,32 @@ function demoTitles(){
   noStroke();
 
   fill(45,45,45,45);
-  rect(0+1,-height/10+1,width/1.15,138,3); //drop shadow
+  rect(0+1,-height/10+1,312,138,3); //drop shadow
 
   fill(colorList[1]);
-  rect(0,-height/10,width/1.15,138,3);
+  rect(0,-height/10,312,138,3); //sequoia button
 
   fill(45,45,45,45);
-  rect(0+1,height/4.7+1,width/1.15,138,3); //drop-shadow
+  rect(0+1,-height/10+160+1,312,138,3); //drop-shadow
 
   fill(colorList[1]);
-  rect(0,height/4.7,width/1.15,138,3);
+  rect(0,-height/10+160,312,138,3); //burj button
 
   imageMode(CENTER);
   textAlign(LEFT);
   fill(45,45,45);
   textSize(28);
   textFont(ubuntuMedium);
-  text(hyperionTitle, width/11,-height/25,width/3,height/4);
-  text('Burj Khalifa',width/11,height/3.8,width/3,height/4);
+  text(hyperionTitle, width/11,-height/21+height/60,width/3,height/4);
+  text('Burj Khalifa',width/11,-height/21+160+height/60,width/3,height/4);
   push();
   scale(0.68);
-  image(sequoia_button,-width/2.5,-height/7.3);
+  image(sequoia_button,-width/8-100,-height/7.25);
   pop();
 
   push();
   scale(0.75);
-  image(burijKalifa_button,-width/2.7,height/3.62);
+  image(burijKalifa_button,-width/12-100,-height/7.4+211);
 
   push();
   noFill();
@@ -509,7 +510,6 @@ function climbStructure(structNum,cloudBool,cloudX,cloudY,cloudMin,cloudMax) {
 var movY=0;
 var movSwitcher=false;
 
-
 function completed() {
   push();
   var txtCompleted;
@@ -525,7 +525,7 @@ function completed() {
         infoOn=true;
       };
     }
-  console.log(movY);
+  // console.log(movY);
   if(eng==true) {txtCompleted="completed!"}
   if(ita==true) {txtCompleted="completata!"}
   textSize(46);
@@ -564,13 +564,13 @@ function infoScreen(structNum) {
   textFont(ubuntuBold);
   noStroke();
   fill(45,45,45,45);
-  rect(0+2,-height/10+2,width/1.1,250,3);
+  rect(0+2,-height/3+110+2,width/1.1,250,3);
   fill(colorList[1]);
-  rect(0,-height/10,width/1.1,250,3);
+  rect(0,-height/3+110,width/1.1,250,3);
   fill(45,45,45,175);
   textSize(14);
   textAlign(LEFT);
-  text(infoTxt,0,height/25,width/1.3,height/2);
+  text(infoTxt,0,-height/120+20,width/1.3,height/2);
   textSize(26);
   fill(45,45,45,185);
   text(structName,0,-height/120,width/1.3,height/1.7);
@@ -579,7 +579,7 @@ function infoScreen(structNum) {
   noFill();
   stroke(45,45,45,45);
   strokeWeight(3);
-  rect(0,height/24,width/5,45,3);
+  rect(0,-height/3+180,width/5,45,3);
   pop();
 
   push();
@@ -587,13 +587,13 @@ function infoScreen(structNum) {
   textSize(21);
   textAlign(CENTER);
   noStroke();
-  text('ok',0,height/18);
+  text('ok',0,-height/3+186);
 
   rectMode(CORNER); //attiva il codice commentato sottostante per mostrare la posizione dell'area di collisione
   // stroke(255);
   // strokeWeight(1);
-  // rect(-width/9,-height/280,width/4.5,45);
-  hit_infoOk = collidePointRect(mouseX-width/2,mouseY-height/2,-width/9,-height/280,width/4.5,45); //funzione di collide2D.p5
+  // rect(-width/8.5,-height/3+155,width/4.3,50);
+  hit_infoOk = collidePointRect(mouseX-width/2,mouseY-height/2,-width/8.5,-height/3+155,width/4.3,50); //funzione di collide2D.p5
   if(hit_infoOk==true) {
     infoOpen=false;
     infoButtonShow=true;
@@ -734,7 +734,7 @@ function radar() {
   var accuracyCircle=accuracy;
   var accuracyCircleCol=colorList[1];
   backMenuOn=false;
-  infoOn=false
+  infoOn=false;
   titleScreenOn = false;
   demoTitlesOn==false;
   climbOn=false;
@@ -805,7 +805,7 @@ function radar() {
     // ellipse(-width/2.35,-height/5.2,35);
     hit_zoomMinus=collidePointCircle(mouseX-width/2,mouseY-height/2,-width/2.35,-height/3.7,35);
     if(hit_zoomMinus==true) {
-      console.log('-: '+hit_zoomMinus);
+      // console.log('-: '+hit_zoomMinus);
       zoomOut();
     }
     pop();
@@ -826,7 +826,7 @@ function radar() {
     text('+',-width/3.4,-height/3+9);
     hit_zoomPlus=collidePointCircle(mouseX-width/2,mouseY-height/2,-width/3.4,-height/3,35);
     if(hit_zoomPlus==true) {
-      console.log('+: '+hit_zoomPlus);
+      // console.log('+: '+hit_zoomPlus);
       zoomIn();
     }
     pop();
@@ -840,8 +840,8 @@ function radar() {
     fill(colorList[1]);
     ellipse(-width/2.3,height/2.3,30);
     textAlign(CENTER);
-    fill(120,120,120);
-    if(nordIsUp==true) {fill(69,190,200);}
+    fill(69,190,200);
+    if(nordIsUp==true) {fill(120,120,120);}
     textFont(ubuntuBold);
     textSize(12);
     triangle(-width/2.3-3,height/2.33,-width/2.3+3,height/2.33,-width/2.3,height/2.33-5);
@@ -852,7 +852,7 @@ function radar() {
         calcPosRelMe();
         if(mouseIsPressed==true) {mouseX=-100; mouseY=-100;}
     }
-    console.log(nordIsUp);
+    // console.log(nordIsUp);
     pop();
   }
 
@@ -1050,6 +1050,7 @@ if(hit_yes==true) {
   metriPrec=0;
   movSwitcher=false;
   infoOn=false;
+  infoOpen=true;
 
   backUpPositionDist=[];
   conv=0;
@@ -1292,7 +1293,7 @@ function showLocation(position) {
     }
     if(climbOn==true){
 
-        console.log(conv);
+        // console.log(conv);
        if ((stabilizzato==true)&&(metriTOT<myData.landmarks_en[scelto].height)&&(metriPrec>accuracyLimit)&&check_scal==true) {
           if((head_scal==null && heading!=null) || (conta_head<10 && heading!=null)){
              head_scal=heading;
@@ -1315,7 +1316,7 @@ function showLocation(position) {
        if(metriTOT>=myData.landmarks_en[scelto].height && check_scal==true && (metriPrec>accuracyLimit)){
            conta_head=0;
            metriTOT=myData.landmarks_en[scelto].height;
-           console.log(height-height/10);
+           // console.log(height-height/10);
            conv=map(myData.landmarks_en[scelto].hPx,0,1280,0,height-height/10);
            rectMode(CORNER);
            //mask.rect((width-((height-height/11)/(1280/720)))/2,height/11,(height-height/11)/(1280/720),(height-height/11));
