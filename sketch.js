@@ -740,7 +740,7 @@ function radar() {
   climbOn=false;
   radarQuadrant();
 
-  nButton();
+
   var locationTitle;
   var locationTxt;
   var signalTitle;
@@ -782,6 +782,7 @@ function radar() {
 
   drawIconOnRadar()
   zoomButtons();
+  nButton();
   pointerIcon(headingMode); //rotation, parametro da collegare all'heading se decidiamo di far muovere il puntatore e non il radar
 
   function zoomButtons() {
@@ -875,22 +876,24 @@ function radar() {
     if (radarQuadrantSwitch==true) {r-=23}
     if (r<=0) {r=0};
 
-    zoomCircle = map (zoom,limSupZoom,limInfZoom,1,0.2)
+    zoomCircle = map (zoom,limSupZoom,limInfZoom,2.7,187.2);
+    circleMassimo = (70+width);
+
 
   noStroke();
   fill(45,45,45,45);
   fill(45,45,45,45);
-  ellipse(0,height/11,70+width/1+2-r); //drop-shadow
+  ellipse(0,height/11,circleMassimo+2-r); //drop-shadow
   fill(245,245,245);
-  ellipse(0,height/11,70+width/1-r);
+  ellipse(0,height/11,circleMassimo-r);
   fill(240,240,240);
-  ellipse(0,height/11,70+width/1-105-r);
+  ellipse(0,height/11,zoomCircle+(circleMassimo-zoomCircle)*(2/3)-r);
   fill(235,235,235);
-  ellipse(0,height/11,70+width/1-230-r);
+  ellipse(0,height/11,zoomCircle+(circleMassimo-zoomCircle)*(1/3)-r);
   fill(123,206,239,rOp);
-  ellipse(0,height/11,70+180-rSignal-r);
+  ellipse(0,height/11,zoomCircle-r);
   fill(235,235,235);
-  ellipse(0,height/11,70+270-380-r);
+  ellipse(0,height/11,70+270-367-r);
   }
 }
 
