@@ -1114,7 +1114,7 @@ function drawIconOnRadar() {
     imageMode(CENTER)
     translate(posXPointer,posYPointer)
     // for (var i=0; i < myData.landmarks_en.length; i++) { //Disegna tutte le icone
-    for (var i=0; i < myData.landmarks_en.length; i++) { //Disegna tutte le icone
+    for (var i=0; i < myData.landmarks_en.length-2; i++) { //Disegna tutte le icone
 
       var wImg,
           hImg,
