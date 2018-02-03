@@ -222,7 +222,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   text('Distanza Precedente: ' + metriPrec, 5, 30 * 6);
   text('conv: ' + conv, 5, 30 * 7);
   text('heading: ' + heading, 5, 30 * 8);
-  text('versione 12:02 3/02/18', 5, 30 * 9);
+  text('versione 17:34 3/02/18', 5, 30 * 9);
   pop();
   // console.log('infoOn: '+infoOn);
   // console.log('infoButtonShow: '+infoButtonShow);
@@ -1306,7 +1306,7 @@ function showLocation(position) {
 
         // console.log(conv);
        if ((stabilizzato==true)&&(metriTOT<myData.landmarks_en[scelto].height)&&(metriPrec>accuracyLimit)&&check_scal==true) {
-          if((head_scal==null && heading!=null) || (conta_head<5 && heading!=null)){
+          if((head_scal==null && heading!=null) || (conta_head<7 && heading!=null)){
              head_scal=heading;
              heading_tot=head_scal;
              conta_head++;
