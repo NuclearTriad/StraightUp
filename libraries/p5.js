@@ -44785,7 +44785,7 @@ var p5 = function(sketch, node, sync) {
       var loadingScreen = document.getElementById(this._loadingScreenId);
       if(!loadingScreen){
         loadingScreen = document.createElement('div');
-        loadingScreen.innerHTML = 'Loading, please be patient...';
+        loadingScreen.innerHTML = '<img src="assets/loadingScreen.png" rel="preload" alt="loading..." style="width:75%; position:absolute; margin:auto; top:0; left:0; right:0; bottom:0;"></div>';
         loadingScreen.style.display = 'absolute';
         loadingScreen.style.color = 'black';
         loadingScreen.style.fontFamily = 'sans-serif';
