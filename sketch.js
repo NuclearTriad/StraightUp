@@ -32,7 +32,7 @@ var myData, //segnaposto JSON
     posXPointer, //posizione centro radar
     posYPointer, //posizione centro radar
 
-    zoom = 13564; //var zoom inizilae
+    zoom = 70000; //var zoom inizilae
     limSupZoom = 1364;
     limInfZoom = 91072;
     zoomIncrement = 1.04;
@@ -222,7 +222,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   text('Distanza Precedente: ' + metriPrec, 5, 30 * 6);
   text('conv: ' + conv, 5, 30 * 7);
   text('heading: ' + heading, 5, 30 * 8);
-  text('versione 13:10 2/02/18', 5, 30 * 9);
+  text('versione 12:02 3/02/18', 5, 30 * 9);
   pop();
   // console.log('infoOn: '+infoOn);
   // console.log('infoButtonShow: '+infoButtonShow);
@@ -456,7 +456,7 @@ function climbInterface(structNum) {
   textFont(ubuntuBoldItalic);
   textSize(40);
   fill(colorList[5]);
-  text(Math.round(metriTOT*10)/10+'/'+myData.landmarks_en[scelto].height+'m',0,height/10,width,50);
+  text(Math.round(metriTOT*10)/10+'m',0,height/10,width,50);
   if(head_scal!=null){ //controllo heading scalata
       if(head_scal>heading_tot+(accuracy*3) || head_scal<heading_tot-(accuracy*3)){
           textSize(12);
@@ -1155,7 +1155,14 @@ function drawIconOnRadar() {
       else if (posRelMe[i].dist<distCliccable) {
         fill(244,128,33,210);
         ellipse(xIn, yIn+(hImg/2), wElli, hElli);
-        image(imgLinkGray[i], xIn, yIn , wImg, hImg);
+        if (myData.landmarks_en[i].visit==false) {
+          fill(45,45,95,70);
+          image(imgLinkGray[i], xIn, yIn , wImg, hImg);
+        } //Se l'icona non è stat visitata
+        else {
+          fill(45,45,95,70);
+          image(imgLinkColore[i], xIn, yIn , wImg, hImg);
+        } //Se l'icona è stat visitata
       } //Se l'icona si trova nelle vicinanze
 
       else {  //Se l'icona è dentro il radar
@@ -1183,7 +1190,7 @@ function drawIconOnRadar() {
     //forse ha a che fare con il mouseX-width/2,mouseY-height/2...
     push();
     //translate(-posXPointer,-posYPointer)
-    rect(xIn,yIn,wImg,hImg);
+    //rect(xIn,yIn,wImg,hImg);
     hit_struct[i]=collidePointRect(mouseX-width/2,mouseY-height/2,xIn-wImg/2,yIn+height/13,wImg,hImg)
     pop();
     //questo è il codice originale:
@@ -1295,7 +1302,7 @@ function showLocation(position) {
 
         // console.log(conv);
        if ((stabilizzato==true)&&(metriTOT<myData.landmarks_en[scelto].height)&&(metriPrec>accuracyLimit)&&check_scal==true) {
-          if((head_scal==null && heading!=null) || (conta_head<10 && heading!=null)){
+          if((head_scal==null && heading!=null) || (conta_head<5 && heading!=null)){
              head_scal=heading;
              heading_tot=head_scal;
              conta_head++;
@@ -1314,6 +1321,9 @@ function showLocation(position) {
 
        }
        if(metriTOT>=myData.landmarks_en[scelto].height && check_scal==true && (metriPrec>accuracyLimit)){
+           myData.landmarks_en[scelto].visit=true;//icona visitata
+           myData.landmarks_it[scelto].visit=true;
+           
            conta_head=0;
            metriTOT=myData.landmarks_en[scelto].height;
            // console.log(height-height/10);
