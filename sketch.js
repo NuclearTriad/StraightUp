@@ -658,38 +658,41 @@ function instructions() {
   push();
   imageMode(CENTER);
   background(colorList[0]);
-  image(camminaIco,-width/3,height/60);
-  image(drittoIco,-width/3,height/60+110);
+  image(camminaIco,-width/3.,height/240);
+  image(drittoIco,-width/3,height/240+108);
   pop();
 
   //text
   push();
-  textSize(17);
+  textSize(width/20);
   textAlign(LEFT);
   textFont(ubuntuMedium);
   fill(224,108,13);
   text(topText,0,-height/3,width-45,height/5);
   textFont(ubuntuBoldItalic);
-  textSize(21);
-  text(titleText,0,-height/16,width-45,height/5);
+  textSize(width/17);
+  text(titleText,0,-height/20,width-45,height/5);
 
   fill(110,110,110);
-  textSize(18);
+  textSize(width/20);
   textFont(ubuntuRegularItalic);
   text(questText,0,-height/4.8,width-45,height/5);
 
   fill(110,110,100);
-  textSize(12);
+  textSize(width/28);
   textFont(ubuntuMedium);
-  text(camminaText,width/12,height/18,width-160,height/5);
-  text(drittoText,width/12,height/18+110,width-160,height/5);
+  text(camminaText,width/12,height/18,width-150,height/5);
+  text(drittoText,width/12,height/18+110,width-150,height/5);
 
   push();
   textAlign(CENTER);
   fill(70,100,210);
   textSize(14);
+  if(height<=435) {
+    textSize(12);
+  }
   textFont(ubuntuBold);
-  text(stabileText,0,height/2.15,width-155,height/5);
+  text(stabileText,0,height/2.15,200,height/5);
   pop();
 
   pop();
@@ -1110,6 +1113,7 @@ function drawIconOnRadar() {
 
     imageMode(CENTER)
     translate(posXPointer,posYPointer)
+    // for (var i=0; i < myData.landmarks_en.length; i++) { //Disegna tutte le icone
     for (var i=0; i < myData.landmarks_en.length; i++) { //Disegna tutte le icone
 
       var wImg,
@@ -1323,7 +1327,7 @@ function showLocation(position) {
        if(metriTOT>=myData.landmarks_en[scelto].height && check_scal==true && (metriPrec>accuracyLimit)){
            myData.landmarks_en[scelto].visit=true;//icona visitata
            myData.landmarks_it[scelto].visit=true;
-           
+
            conta_head=0;
            metriTOT=myData.landmarks_en[scelto].height;
            // console.log(height-height/10);
