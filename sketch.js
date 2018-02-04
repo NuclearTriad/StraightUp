@@ -209,7 +209,8 @@ function draw() {
 if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   bMenu();
 }
-  push();
+  push(); // debug
+  /*
   translate(-width/2,-height/2);
   textAlign(LEFT);
   textSize(12);
@@ -223,6 +224,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   text('conv: ' + conv, 5, 30 * 7);
   text('heading: ' + heading, 5, 30 * 8);
   text('versione 12:02 3/02/18', 5, 30 * 9);
+  */
   pop();
   // console.log('infoOn: '+infoOn);
   // console.log('infoButtonShow: '+infoButtonShow);
@@ -1306,10 +1308,10 @@ function showLocation(position) {
 
         // console.log(conv);
        if ((stabilizzato==true)&&(metriTOT<myData.landmarks_en[scelto].height)&&(metriPrec>accuracyLimit)&&check_scal==true) {
-          if((head_scal==null && heading!=null) || (conta_head<5 && heading!=null)){
+          if((head_scal==null && heading!=null) || (conta_head<7 && heading!=null)){
              head_scal=heading;
              heading_tot=head_scal;
-             conta_head++;
+             conta_head++; //contatore per tollerare nei primi metri di camminata l'assestamento dell'heading
           }
           if (isNaN(metriPrec)==false) {backUpPositionDist.push(metriPrec);} //se gli aggiornamenti hanno raggiunto la quota di 15. inizia ad aggiungere le distanze percorse alla Array di tutte le distanze
           metriTOT = backUpPositionDist.sum(); //fai la sommatoria della Array di tutte le distanze percorse per sapere la distanza totale percorsa
