@@ -223,7 +223,7 @@ if(backMenu==true) { //se true fa comparire il menu per tornare indietro
   text('Distanza Precedente: ' + metriPrec, 5, 30 * 6);
   text('conv: ' + conv, 5, 30 * 7);
   text('heading: ' + heading, 5, 30 * 8);
-  text('versione 12:02 3/02/18', 5, 30 * 9);
+  text('versione 12:48 5/02/18', 5, 30 * 9);
   */
   pop();
   // console.log('infoOn: '+infoOn);
@@ -639,17 +639,17 @@ function instructions() {
     var topText="The human mind perceives distance and height in different ways.",
         questText="What happens if vertical becomes horizontal?",
         titleText="Instructions";
-        camminaText="Choose one of the landmarks and begin to walk. Stop when you've completed the whole height.";
+        camminaText="Choose one of the landmarks, stand still for a moment and begin to walk. Stop when you've completed the whole height.";
         drittoText="Tip: walk straight for the best experience.";
 
         if(stabilizzato==false) {stabileText="Stabilization in progress! Stand still for a moment..."}
         else{stabileText=""};
   }
   if(ita==true) {
-    var topText="La mente umana percepisce l'altezza e la distanza in modo differente",
+    var topText="La mente umana percepisce l'altezza e la distanza in modo differente.",
         questText="Cosa succede se il verticale diventa orizzontale?",
         titleText="Istruzioni",
-        camminaText="Scegli uno dei punti di riferimento e inizia a camminare. Fermati quando avrai completato l'intera altezza",
+        camminaText="Scegli uno dei punti di interesse, fermati qualche istante e inizia a camminare. Fermati quando avrai completato l'intera altezza.",
         drittoText="Suggerimento: per un'esperienza migliore cammina in linea retta.";
 
     if(stabilizzato==false) {stabileText="Stabilizzazione in corso! Resta fermo un attimo..."}
