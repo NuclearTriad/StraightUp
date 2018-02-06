@@ -39,7 +39,8 @@ integrated with additional code to calculate the distance between two points.
 ### Heading control
 ```
 Problem: 
-During the climb mode of the chosen structure is suggested to walk straight, in order to perceive better the distance. 
+During the climb mode of the chosen structure is suggested to walk straight, 
+in order to perceive the distance better.
 We’ve decided to not limit the user’s possibilities forcing him to restart. 
 He we’ll be only warned to walk in the original direction. 
 This control is done using the heading parameter obtained with the API. Usually it has a long refresh time 
