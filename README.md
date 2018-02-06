@@ -17,7 +17,7 @@ If the user is far away from all the available structures, the demo mode will al
 
 
 
-## 2.Libraries used
+## 2.Used libraries
 
 ### HTML5 Geolocation API:
 ![alt text](https://raw.githubusercontent.com/NuclearTriad/straightup/master/assets/html5_geolocation_api.png "HTML5 Geolocation API")
