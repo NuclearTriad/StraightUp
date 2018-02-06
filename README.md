@@ -30,7 +30,7 @@ To ensure an optimal user experience, we choose to use the "p5.collider2D" libra
 
 Problem: p5.geolocation library has compatibility issues with some devices.
 Solution: We avoid this problem using the HTML5 Geolocation API without any additional library, integrated with additional code to calculate the distance between two points.
-
+```
 ### Problem: 
 During the climb mode of the chosen structure is suggested to walk straight, in order to perceive better the distance. We’ve decided to not limit the user’s possibilities forcing him to restart. He we’ll be only warned to walk in the original direction. This control is done using the heading parameter obtained with the API. Usually it has a long refresh time when starting to walk. This time is independent by the accuracy. 
 ### Solution: 
