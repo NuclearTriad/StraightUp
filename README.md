@@ -14,6 +14,7 @@ If the user is far away from all the available structures, the demo mode will al
 
 ### Tips for a better experience:
 1.Walking in a straight line will give a better perception of the walked distance;
+
 2.The GPS signal works better in open sky, away from very narrow roads or high trees. (accuracy and heading can give approximated results if the user is inside a building or in case of interfered signal).
 
 
