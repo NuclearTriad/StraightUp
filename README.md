@@ -33,25 +33,34 @@ To ensure an optimal user experience, we choose to use the "p5.collider2D" libra
 Problem: p5.geolocation library has compatibility issues with some devices.
 ```
 ```
-Solution: We avoid this problem using the HTML5 Geolocation API without any additional library, integrated with additional code to calculate the distance between two points.
+Solution: We avoid this problem using the HTML5 Geolocation API without any additional library, 
+integrated with additional code to calculate the distance between two points.
 ```
 ### Heading control
 ```
 Problem: 
-During the climb mode of the chosen structure is suggested to walk straight, in order to perceive better the distance. We’ve decided to not limit the user’s possibilities forcing him to restart. He we’ll be only warned to walk in the original direction. This control is done using the heading parameter obtained with the API. Usually it has a long refresh time when starting to walk. This time is independent by the accuracy. 
+During the climb mode of the chosen structure is suggested to walk straight, in order to perceive better the distance. 
+We’ve decided to not limit the user’s possibilities forcing him to restart. 
+He we’ll be only warned to walk in the original direction. 
+This control is done using the heading parameter obtained with the API. Usually it has a long refresh time 
+when starting to walk. This time is independent by the accuracy. 
 ```
 ```
 Solution: 
-Starting the climb mode there will be a steady number of position updates allowing the stabilization. However this control will be more effective on long distances and with high values of accuracy. 
+Starting the climb mode there will be a steady number of position updates allowing the stabilization. 
+However this control will be more effective on long distances and with high values of accuracy. 
 ```
 ### Signal stabilization
 ```
 Problem: 
-initial stabilization of GPS signal for more precision. Sometimes the GPS detects movements that are not corresponding to real movements of the user.
+initial stabilization of GPS signal for more precision. 
+Sometimes the GPS detects movements that are not corresponding to real movements of the user.
 ```
 ```
 Solution:
-when the page is loaded the sketch will proceed to calculate the accuracy of the signal in order to obtain casual movements of the position under a fixed value. This need a short time asking to the user to stand still.
+when the page is loaded the sketch will proceed to calculate the accuracy of the signal 
+in order to obtain casual movements of the position under a fixed value. 
+This need a short time asking to the user to stand still.
 ```
 ### Image loading
 ```
@@ -78,7 +87,8 @@ make the climb mode responsive, considering the mask of the structure.
 ```
 ```
 Solution: 
-remap hPx parameter stored in the Json file on the new height of the structure defined by the height of the canvas.
+remap hPx parameter stored in the Json file on the new height of the structure defined 
+by the height of the canvas.
 
 
 
