@@ -6,18 +6,18 @@
 We perceive distance and height in different ways.
 The purpose of the experience is to get the user to perceive the heights of the buildings that they see every day. If we rise our eyes they look very high. But can our perception change if we could walk them horizontally?
 
+![alt text](https://raw.githubusercontent.com/NuclearTriad/straightup/master/assets/idea.png "Can our perception change if we could walk them horizontally?")
+
 In the main mode the radar allows to find all the nearest buildings, helping the user to reach them. The building will be available only if the user in near to his base. In this way we can see the building with our eyes. When the user will tap on it, the climb mode will start and the user will be able to walk its whole height.
 
 If the user is far away from all the available structures, the demo mode will allow the user to try out the experience with two of the tallest things on this planet: the highest tree in the world and the highest skyscraper.
 
 ### Tips for a better experience:
-* Walking in a straight line will give a better perception of the walked distance;
-* The GPS signal works better in open sky, away from very narrow roads or high trees. (accuracy and heading can give approximated results if the user is inside a building or in case of interfered signal).
+1.Walking in a straight line will give a better perception of the walked distance;
+2.The GPS signal works better in open sky, away from very narrow roads or high trees. (accuracy and heading can give approximated results if the user is inside a building or in case of interfered signal).
 
 
-
-
-## 2.Used libraries
+## 2.Libraries used
 
 ### HTML5 Geolocation API:
 ![alt text](https://raw.githubusercontent.com/NuclearTriad/straightup/master/assets/html5_geolocation_api.png "HTML5 Geolocation API")
@@ -96,12 +96,6 @@ making the climb mode responsive, while taking into consideration the mask of th
 Solution: 
 remap hPx parameter stored in the Json file on the new height of the structure defined 
 by the height of the canvas.
-```
 
-## 4.Credits
 
-Nuclear triad
 
-Nicolò Azzolin/Federico Crippa/Andrea Picardi
-
-Creative Coding, Politecnico di Milano, A.A. 2017/18
