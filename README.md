@@ -11,8 +11,8 @@ In the main mode the radar allows to find all the nearest buildings, helping the
 If the user is far away from all the available structures, the demo mode will allow the user to try out the experience with two of the tallest things on this planet: the highest tree in the world and the highest skyscraper.
 
 ### Tips for a better experience:
-* 1.Walking in a straight line will give a better perception of the walked distance;
-* 2.The GPS signal works better in open sky, away from very narrow roads or high trees. (accuracy and heading can give approximated results if the user is inside a building or in case of interfered signal).
+* Walking in a straight line will give a better perception of the walked distance;
+* The GPS signal works better in open sky, away from very narrow roads or high trees. (accuracy and heading can give approximated results if the user is inside a building or in case of interfered signal).
 
 
 
