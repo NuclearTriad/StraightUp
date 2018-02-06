@@ -12,7 +12,7 @@ In the main mode the radar allows to find all the nearest buildings, helping the
 
 If the user is far away from all the available structures, the demo mode will allow the user to try out the experience with two of the tallest things on this planet: the highest tree in the world and the highest skyscraper.
 
-### Tips for a better experience:
+### Tips for a better experience
 1.Walking in a straight line will give a better perception of the walked distance;
 
 2.The GPS signal works better in open sky, away from very narrow roads or high trees. (accuracy and heading can give approximated results if the user is inside a building or in case of interfered signal).
@@ -20,13 +20,13 @@ If the user is far away from all the available structures, the demo mode will al
 
 ## 2.Libraries used
 
-### HTML5 Geolocation API:
+### HTML5 Geolocation API
 ![alt text](https://raw.githubusercontent.com/NuclearTriad/straightup/master/assets/html5_geolocation_api.png "HTML5 Geolocation API")
 
 To be able to obtain the user’s walked distances to ensure a basic user experience, we needed a method to calculate its movements.
 At the beginning we evaluated several ways to collect these parameters, but we then opted to take the data through GPS localization. With this method we can keep track of the user's movements and calculate the distance he traveled. We can also collect other data such as heading, accuracy and speed, to ensure a better user experience. The geolocation data are also useful to place the "climbable" landmark inside the radar in the exact real coordinates, and also to inform the user if he/she is close enough to start climbing it.
 
-### p5.collide2D:
+### p5.collide2D
 ![alt text](https://raw.githubusercontent.com/NuclearTriad/straightup/master/assets/p5collide2d.png "p5.collide2D")
 
 For an easier and quicker implementation of the UI, we choose to use the "p5.collider2D" library which allowed us to calculate accurately if certain elements of the interface are triggered.
