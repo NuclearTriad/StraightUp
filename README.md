@@ -6,7 +6,7 @@
 We perceive distance and height in different ways.
 The purpose of the experience is to get the user to perceive the heights of the buildings that they see every day. If we rise our eyes they look very high. But can our perception change if we could walk them horizontally?
 
-![alt text](https://raw.githubusercontent.com/NuclearTriad/straightup/master/assets/idea.png "Can our perception change if we could walk them horizontally?")
+![alt text](https://raw.githubusercontent.com/NuclearTriad/straightup/master/assets/idea-img.png "Can our perception change if we could walk them horizontally?")
 
 In the main mode the radar allows to find all the nearest buildings, helping the user to reach them. The building will be available only if the user in near to his base. In this way we can see the building with our eyes. When the user will tap on it, the climb mode will start and the user will be able to walk its whole height.
 
