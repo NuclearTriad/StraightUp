@@ -81,7 +81,8 @@ are loaded only when they’re required by the page.
 ### Touch interferences
 ```
 Problem: 
-when the user touches the screen, the touch persists even when the touch is released interfering with other buttons.
+when the user touches the screen, the touch persists even when the touch is released 
+interfering with other buttons.
 ```
 ```
 Solution: 
