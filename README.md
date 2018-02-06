@@ -15,6 +15,8 @@ If the user is far away from all the available structures, the demo mode will al
 2.The GPS signal works better in open sky, away from very narrow roads or high trees. (accuracy and heading can give approximated results if the user is inside a building or in case of interfered signal).
 
 
+
+
 ## 2.Libraries used
 
 ### HTML5 Geolocation API:
