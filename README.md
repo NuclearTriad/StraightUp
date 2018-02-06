@@ -96,6 +96,12 @@ making the climb mode responsive, while taking into consideration the mask of th
 Solution: 
 remap hPx parameter stored in the Json file on the new height of the structure defined 
 by the height of the canvas.
+```
 
+## 4.Credits
 
+Nuclear triad
 
+Nicolò Azzolin/Federico Crippa/Andrea Picardi
+
+Creative Coding, Politecnico di Milano, A.A. 2017/18
